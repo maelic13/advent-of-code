@@ -5,9 +5,8 @@ from typing import Callable, Iterable, Optional
 from src.infra.api import DataReader
 
 
-def expense_record(file_name: str, number_of_items: int) -> Optional[ndarray]:
-    data = DataReader.read_txt(file_name, int)
-    for item in combinations(data, number_of_items):
+def expense_record(item_list: Iterable, number_of_items: int) -> Optional[ndarray]:
+    for item in combinations(item_list, number_of_items):
         if check_item(item, sum, 2020):
             return prod(item)
     return None
@@ -18,5 +17,6 @@ def check_item(iterable: Iterable, function: Callable, target: float) -> bool:
 
 
 if __name__ == "__main__":
-    solution = expense_record("d1_t1.txt", 2)
+    data = DataReader.read_txt("d1_t1.txt", int)
+    solution = expense_record(data, 2)
     print("Solution is: {}".format(solution))
