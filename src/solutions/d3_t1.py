@@ -1,4 +1,3 @@
-from copy import copy
 from math import gcd
 import numpy as np
 from typing import List
@@ -23,6 +22,17 @@ class TobogganRouteTracker:
 
 
 if __name__ == "__main__":
-    input_data = DataReader.read_txt("d3_t1.txt", str)
+    input_data = DataReader.read_txt("day3.txt", str)
+
     result = TobogganRouteTracker(input_data).count_trees_hit(np.array((0, 0)), np.array((3, 1)))
-    print("You hit {} trees.".format(result))
+    print("With slope {} you hit {} trees.".format((3, 1), result))
+
+    slopes = [
+        np.array((1, 1)),
+        np.array((5, 1)),
+        np.array((7, 1)),
+        np.array((1, 2))
+    ]
+    for single_slope in slopes:
+        result *= TobogganRouteTracker(input_data).count_trees_hit(np.array((0, 0)), single_slope)
+    print("With multiple additional slopes, result is {} trees.".format(result))

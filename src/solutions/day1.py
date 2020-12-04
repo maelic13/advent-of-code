@@ -17,6 +17,9 @@ def check_item(iterable: Iterable, function: Callable, target: float) -> bool:
 
 
 if __name__ == "__main__":
-    data = DataReader.read_txt("d1_t1.txt", int)
-    solution = expense_record(data, 2)
-    print("Solution is: {}".format(solution))
+    data = DataReader.read_txt("day1.txt", int)
+    solution1 = expense_record(data, 2)
+    print("Solution part 1 is: {}".format(solution1))
+
+    solution2 = expense_record(data, 3)
+    print("Solution part 2 is: {}".format(solution2))

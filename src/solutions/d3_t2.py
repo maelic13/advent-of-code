@@ -6,7 +6,7 @@ from src.solutions.d3_t1 import TobogganRouteTracker
 
 
 if __name__ == "__main__":
-    input_data = DataReader.read_txt("d3_t1.txt", str)
+    input_data = DataReader.read_txt("day3.txt", str)
 
     result = 1
     slopes = [
