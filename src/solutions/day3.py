@@ -20,9 +20,11 @@ def count_trees_hit(slope_map: List, current_pos: np.ndarray, slope: np.ndarray)
 if __name__ == "__main__":
     input_data = DataReader.read_txt("day3_brother.txt", str)
 
-    result = count_trees_hit(input_data, np.array((0, 0)), np.array((3, 1)))
+    single_slope = np.array((3, 1))
+    result = count_trees_hit(input_data, np.array((0, 0)), single_slope)
     print("With slope {} you hit {} trees.".format((3, 1), result))
 
+    result_list = [result]
     slopes = [
         np.array((1, 1)),
         np.array((5, 1)),
@@ -30,5 +32,8 @@ if __name__ == "__main__":
         np.array((1, 2))
     ]
     for single_slope in slopes:
-        result *= count_trees_hit(input_data, np.array((0, 0)), single_slope)
-    print("With multiple additional slopes, result is {} trees.".format(result))
+        result = count_trees_hit(input_data, np.array((0, 0)), single_slope)
+        result_list.append(result)
+    result_multi = np.prod(result_list)
+    print("\nWith multiple additional slopes, result is {} trees.".format(result_multi))
+    print("Step results are: {}".format(result_list))
