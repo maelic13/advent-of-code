@@ -17,4 +17,7 @@ class DataReader:
                 batch = list()
                 continue
             batch += line.rstrip().split(sample_limiter)
+            if lines[-1] == line:
+                full_data.append(batch)
+                batch = list()
         return full_data
