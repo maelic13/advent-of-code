@@ -40,7 +40,8 @@ def validate_field(field: str) -> bool:
     if field_name == "hcl":
         if "#" not in field_value:
             return False
-        allowed = ["#", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"]
+        allowed = ["#", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
+                   "a", "b", "c", "d", "e", "f"]
         return np.all([character in allowed for character in field_value])
     if field_name == "ecl":
         return field_value in ["amb", "blu", "brn", "gry", "grn", "hzl", "oth"]
@@ -63,4 +64,5 @@ if __name__ == "__main__":
     print("Number of valid passports counting in those without cid: {}.".format(valid_passports))
 
     valid_strict = count_valid_passports(input_data, required_fields, strict=True)
-    print("Number of strictly valid passports counting in those without cid: {}.".format(valid_strict))
+    print("Number of strictly valid passports counting in those without cid: {}.".format(
+        valid_strict))

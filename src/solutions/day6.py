@@ -22,7 +22,8 @@ class QuestionnaireHelper:
                 if ans_type == "unique":
                     result.add(character)
                 elif ans_type == "common":
-                    result.add(character) if np.all([character in group for group in group_answers]) else None
+                    result.add(character) if np.all(
+                        [character in group for group in group_answers]) else None
         return result
 
 
