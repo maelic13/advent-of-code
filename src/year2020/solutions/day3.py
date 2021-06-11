@@ -2,7 +2,7 @@ from math import gcd
 import numpy as np
 from typing import List
 
-from src.infra.api import DataReader
+from src.year2020.infra.api import DataReader
 
 
 def count_trees_hit(slope_map: List, current_pos: np.ndarray, slope: np.ndarray) -> int:
@@ -18,7 +18,7 @@ def count_trees_hit(slope_map: List, current_pos: np.ndarray, slope: np.ndarray)
 
 
 if __name__ == "__main__":
-    input_data = DataReader.read_txt("day3_brother.txt", str)
+    input_data = DataReader.read_txt("day3.txt", str)
 
     single_slope = np.array((3, 1))
     result = count_trees_hit(input_data, np.array((0, 0)), single_slope)

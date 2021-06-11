@@ -1,5 +1,6 @@
 # folders
 .idea/
+venv/
 
 # files
 *.pyc
