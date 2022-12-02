@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
 from typing import Iterable
 
-from src.year2020.infra.api import DataReader
+from src.infra import DataReader
 
 
 class PasswordValidator(metaclass=ABCMeta):

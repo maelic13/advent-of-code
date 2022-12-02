@@ -2,7 +2,7 @@ from copy import copy
 import numpy as np
 from typing import List
 
-from src.year2020.infra.api import DataReader
+from src.infra import DataReader
 
 
 def count_valid_passports(database: List, required: List, strict: bool = False) -> int:

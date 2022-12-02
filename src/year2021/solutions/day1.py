@@ -1,7 +1,7 @@
 import numpy as np
 from typing import List
 
-from src.year2020.infra.api import DataReader
+from src.infra import DataReader
 
 
 def count_increases(measurements: List[int]) -> int:

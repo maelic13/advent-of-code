@@ -1,6 +1,6 @@
 from typing import List, Optional, Tuple
 
-from src.year2020.infra.api import DataReader
+from src.infra import DataReader
 
 
 class BoardingPass:

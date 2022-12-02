@@ -1,6 +1,6 @@
 from typing import List, Tuple
 
-from src.year2020.infra.api import DataReader
+from src.infra import DataReader
 
 
 def calculate_position(course: List[str], initial_position: Tuple[int, int] = (0, 0)

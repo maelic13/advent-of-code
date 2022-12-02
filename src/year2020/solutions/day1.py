@@ -2,7 +2,7 @@ from itertools import combinations
 from numpy import ndarray, prod
 from typing import Callable, Iterable, Optional
 
-from src.year2020.infra.api import DataReader
+from src.infra import DataReader
 
 
 def expense_record(item_list: Iterable, number_of_items: int) -> Optional[ndarray]:

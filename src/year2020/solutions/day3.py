@@ -2,7 +2,7 @@ from math import gcd
 import numpy as np
 from typing import List
 
-from src.year2020.infra.api import DataReader
+from src.infra import DataReader
 
 
 def count_trees_hit(slope_map: List, current_pos: np.ndarray, slope: np.ndarray) -> int:

@@ -1,7 +1,7 @@
 import numpy as np
 from typing import List
 
-from src.year2020.infra.api import DataReader
+from src.infra import DataReader
 
 
 class QuestionnaireHelper:
