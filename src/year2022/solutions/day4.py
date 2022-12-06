@@ -20,7 +20,7 @@ if __name__ == "__main__":
     with open("../inputs/day4.txt", "r") as file:
         lines = file.readlines()
 
-    # part1
+    # part 1
     complete_overlap_counter = 0
     for line in lines:
         first_sectors, second_sectors = line.strip().split(",")
@@ -31,7 +31,7 @@ if __name__ == "__main__":
             complete_overlap_counter += 1
     print(complete_overlap_counter)
 
-    # part2
+    # part 2
     counter = 0
     for line in lines:
         first_sectors, second_sectors = line.strip().split(",")

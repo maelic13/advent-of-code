@@ -60,7 +60,7 @@ if __name__ == "__main__":
     for line in lines:
         data.append(line.rstrip().split(" "))
 
-    # part1
+    # part 1
     total_score = 0
     for opponent_choice, choice in data:
         total_score += RPSPlayer.evaluate(choice, opponent_choice)

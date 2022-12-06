@@ -19,7 +19,7 @@ if __name__ == "__main__":
     with open("../inputs/day3.txt", "r") as file:
         lines = file.readlines()
 
-    # part1
+    # part 1
     errors: list[str] = list()
     for line in lines:
         first_half = line.strip()[:len(line) // 2]
@@ -27,7 +27,7 @@ if __name__ == "__main__":
         errors.append(find_common([first_half, second_half]))
     print(evaluate_prio(errors))
 
-    # part2
+    # part 2
     i = 0
     errors: list[str] = list()
     while i < len(lines):
