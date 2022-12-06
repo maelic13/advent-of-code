@@ -56,18 +56,18 @@ if __name__ == "__main__":
     with open("../inputs/day2.txt", "r") as file:
         lines = file.readlines()
 
-    data = list()
+    data: list[list[str]] = []
     for line in lines:
         data.append(line.rstrip().split(" "))
 
     # part 1
-    total_score = 0
+    TOTAL_SCORE = 0
     for opponent_choice, choice in data:
-        total_score += RPSPlayer.evaluate(choice, opponent_choice)
-    print(total_score)
+        TOTAL_SCORE += RPSPlayer.evaluate(choice, opponent_choice)
+    print(TOTAL_SCORE)
 
     # part 2
-    total_score = 0
+    TOTAL_SCORE = 0
     for opponent_choice, game_result in data:
-        total_score += RPSPlayer.evaluate_with_result(opponent_choice, game_result)
-    print(total_score)
+        TOTAL_SCORE += RPSPlayer.evaluate_with_result(opponent_choice, game_result)
+    print(TOTAL_SCORE)

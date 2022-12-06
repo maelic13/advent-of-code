@@ -1,12 +1,16 @@
 class Move:
-    def __init__(self, text_move: str) -> None:
-        parameters = text_move.strip().split(" ")
-        self.count = int(parameters[1])
-        self.origin = int(parameters[3]) - 1
-        self.target = int(parameters[5]) - 1
+    def __init__(self, count: int, origin: int, target: int) -> None:
+        self.count = count
+        self.origin = origin
+        self.target = target
 
-    def __str__(self) -> str:
-        return f"move {self.count} from {self.origin} to {self.target}"
+    @staticmethod
+    def from_text(text_move: str) -> "Move":
+        parameters = text_move.strip().split(" ")
+        count = int(parameters[1])
+        origin = int(parameters[3]) - 1
+        target = int(parameters[5]) - 1
+        return Move(count, origin, target)
 
 
 class Cargo:
@@ -46,7 +50,7 @@ if __name__ == "__main__":
         lines = file.readlines()
 
     cargo = Cargo.from_text(lines[:lines.index("\n")])
-    moves: list[Move] = [Move(x) for x in lines[lines.index("\n") + 1:]]
+    moves: list[Move] = [Move.from_text(x) for x in lines[lines.index("\n") + 1:]]
 
     # part 1
     for move in moves:

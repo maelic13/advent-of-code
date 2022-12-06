@@ -1,5 +1,4 @@
 from abc import ABCMeta, abstractmethod
-from typing import Iterable
 
 from src.infra import DataReader
 
@@ -7,18 +6,18 @@ from src.infra import DataReader
 class PasswordValidator(metaclass=ABCMeta):
     @staticmethod
     @abstractmethod
-    def check_password(par1, par2, symbol, password):
+    def check_password(par1: int, par2: int, symbol: str, password: str) -> bool:
         """
         Check password validity.
         """
 
-    def count_valid_passwords(self, database: Iterable) -> int:
+    def count_valid_passwords(self, database: list[str]) -> int:
         valid, _ = self.validate_passwords(database)
         return len(valid)
 
-    def validate_passwords(self, database: Iterable) -> [Iterable, Iterable]:
-        valid = list()
-        invalid = list()
+    def validate_passwords(self, database: list[str]) -> tuple[list[str], list[str]]:
+        valid: list[str] = []
+        invalid: list[str] = []
 
         for item in database:
             par1, par2, symbol, password = self._parse_database_entry(item)
@@ -29,7 +28,7 @@ class PasswordValidator(metaclass=ABCMeta):
         return valid, invalid
 
     @staticmethod
-    def _parse_database_entry(database_entry: str) -> [int, int, str, str]:
+    def _parse_database_entry(database_entry: str) -> tuple[int, int, str, str]:
         temp, password = database_entry.split(": ")
         temp, symbol = temp.split(" ")
         par1, par2 = temp.split("-")
@@ -38,21 +37,21 @@ class PasswordValidator(metaclass=ABCMeta):
 
 class SumPasswordValidator(PasswordValidator):
     @staticmethod
-    def check_password(minimum, maximum, symbol, password):
-        return minimum <= password.count(symbol) <= maximum
+    def check_password(par1: int, par2: int, symbol: str, password: str) -> bool:
+        return par1 <= password.count(symbol) <= par2
 
 
 class PositionalPasswordValidator(PasswordValidator):
     @staticmethod
-    def check_password(index1, index2, symbol, password):
-        return (password[index1 - 1] == symbol and password[index2 - 1] != symbol
-                or password[index1 - 1] != symbol and password[index2 - 1] == symbol)
+    def check_password(par1: int, par2: int, symbol: str, password: str) -> bool:
+        return (password[par1 - 1] == symbol and password[par2 - 1] != symbol
+                or password[par1 - 1] != symbol and password[par2 - 1] == symbol)
 
 
 if __name__ == "__main__":
-    data = DataReader.read_txt("day2.txt", str)
-    solution = SumPasswordValidator().count_valid_passwords(data)
-    print("Number of valid passwords method sum: {}".format(solution))
+    DATA = DataReader.read_txt("day2.txt", str)
+    SOLUTION = SumPasswordValidator().count_valid_passwords(DATA)
+    print(F"Number of valid passwords method sum: {SOLUTION}")
 
-    solution = PositionalPasswordValidator().count_valid_passwords(data)
-    print("Number of valid passwords method position: {}".format(solution))
+    SOLUTION = PositionalPasswordValidator().count_valid_passwords(DATA)
+    print(F"Number of valid passwords method position: {SOLUTION}")

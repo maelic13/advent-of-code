@@ -1,5 +1,6 @@
 # folders
 .idea/
+.mypy_cache/
 venv/
 
 # files

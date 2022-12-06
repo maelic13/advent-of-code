@@ -10,7 +10,7 @@ def evaluate_prio(items: list[str]) -> int:
 
 def find_common(rucksacks: list[str]) -> str:
     for character in rucksacks[0].strip():
-        if all([character in rucksack for rucksack in rucksacks[1:]]):
+        if all(character in rucksack for rucksack in rucksacks[1:]):
             return character
     raise RuntimeError("No common item in rucksacks!")
 
@@ -20,7 +20,7 @@ if __name__ == "__main__":
         lines = file.readlines()
 
     # part 1
-    errors: list[str] = list()
+    errors: list[str] = []
     for line in lines:
         first_half = line.strip()[:len(line) // 2]
         second_half = line.strip()[len(line) // 2:]
@@ -29,7 +29,7 @@ if __name__ == "__main__":
 
     # part 2
     i = 0
-    errors: list[str] = list()
+    errors = []
     while i < len(lines):
         errors.append(find_common(lines[i:i + 3]))
         i += 3

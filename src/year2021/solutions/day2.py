@@ -1,10 +1,8 @@
-from typing import List, Tuple
-
 from src.infra import DataReader
 
 
-def calculate_position(course: List[str], initial_position: Tuple[int, int] = (0, 0)
-                       ) -> Tuple[int, int]:
+def calculate_position(course: list[str], initial_position: tuple[int, int] = (0, 0)
+                       ) -> tuple[int, int]:
     distance, depth = initial_position
     for instruction in course:
         command, value = instruction.split(" ")
@@ -17,9 +15,9 @@ def calculate_position(course: List[str], initial_position: Tuple[int, int] = (0
     return distance, depth
 
 
-def calculate_position_with_aim(course: List[str],
-                                initial_position: Tuple[int, int, int] = (0, 0, 0)
-                                ) -> Tuple[int, int]:
+def calculate_position_with_aim(course: list[str],
+                                initial_position: tuple[int, int, int] = (0, 0, 0)
+                                ) -> tuple[int, int]:
     aim, distance, depth = initial_position
     for instruction in course:
         command, value = instruction.split(" ")

@@ -13,15 +13,15 @@ class DataReader:
         with open("../inputs/" + file_name, "r") as file:
             lines = file.readlines()
 
-        full_data = list()
-        batch = list()
+        full_data: list[list[str]] = []
+        batch: list[str] = []
         for line in lines:
             if line == batch_limiter:
                 full_data.append(batch)
-                batch = list()
+                batch = []
                 continue
             batch += line.rstrip().split(sample_limiter)
             if lines[-1] == line:
                 full_data.append(batch)
-                batch = list()
+                batch = []
         return full_data

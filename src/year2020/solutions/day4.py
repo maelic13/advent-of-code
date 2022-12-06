@@ -1,11 +1,10 @@
 from copy import copy
-import numpy as np
-from typing import List
 
 from src.infra import DataReader
 
 
-def count_valid_passports(database: List, required: List, strict: bool = False) -> int:
+def count_valid_passports(database: list[list[str]], required: list[str],
+                          strict: bool = False) -> int:
     valid = 0
     for item in database:
         if not check_passport(item, copy(required), strict):
@@ -13,7 +12,7 @@ def count_valid_passports(database: List, required: List, strict: bool = False) 
     return valid
 
 
-def check_passport(passport: List, fields: List, strict: bool) -> List:
+def check_passport(passport: list[str], fields: list[str], strict: bool) -> list:
     for item in passport:
         for field in fields:
             if strict and not validate_field(item):
@@ -23,6 +22,7 @@ def check_passport(passport: List, fields: List, strict: bool) -> List:
     return fields
 
 
+# pylint: disable=too-many-return-statements
 def validate_field(field: str) -> bool:
     field_name, field_value = field.split(":")
     if field_name == "byr":
@@ -42,7 +42,7 @@ def validate_field(field: str) -> bool:
             return False
         allowed = ["#", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
                    "a", "b", "c", "d", "e", "f"]
-        return np.all([character in allowed for character in field_value])
+        return all(character in allowed for character in field_value)
     if field_name == "ecl":
         return field_value in ["amb", "blu", "brn", "gry", "grn", "hzl", "oth"]
     if field_name == "pid":
@@ -58,11 +58,10 @@ def validate_field(field: str) -> bool:
 
 
 if __name__ == "__main__":
-    input_data = DataReader.read_txt_in_batch("day4.txt")
-    required_fields = ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"]
-    valid_passports = count_valid_passports(input_data, required_fields)
-    print("Number of valid passports counting in those without cid: {}.".format(valid_passports))
+    INPUT_DATA = DataReader.read_txt_in_batch("day4.txt")
+    REQUIRED_FIELDS = ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"]
+    VALID_PASSPORTS = count_valid_passports(INPUT_DATA, REQUIRED_FIELDS)
+    print(f"Number of valid passports counting in those without cid: {VALID_PASSPORTS}.")
 
-    valid_strict = count_valid_passports(input_data, required_fields, strict=True)
-    print("Number of strictly valid passports counting in those without cid: {}.".format(
-        valid_strict))
+    VALID_STRICT = count_valid_passports(INPUT_DATA, REQUIRED_FIELDS, strict=True)
+    print(f"Number of strictly valid passports counting in those without cid: {VALID_STRICT}.")
