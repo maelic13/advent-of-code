@@ -92,7 +92,7 @@ class FrontPanel:
 
 
 if __name__ == "__main__":
-    INPUT_FILE = "../inputs/day3.txt"
+    INPUT_FILE = "inputs/day3.txt"
     panel = FrontPanel.from_file(INPUT_FILE)
 
     panel.calculate_intersections()

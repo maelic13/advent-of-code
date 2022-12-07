@@ -31,7 +31,7 @@ def calculate_fuel_requirements(input_file: str) -> tuple[int, int]:
 
 
 if __name__ == "__main__":
-    INPUT_FILE = '../inputs/day1.txt'
+    INPUT_FILE = 'inputs/day1.txt'
     fuel_mass, fuel_mass_including_fuel = calculate_fuel_requirements(INPUT_FILE)
     print(f"Fuel required for all the modules: {fuel_mass}\n"
           f"Fuel required for all modules, counting in the weight "

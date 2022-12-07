@@ -64,7 +64,7 @@ def task2(computer: Intcode) -> int:
 
 if __name__ == "__main__":
     intcode = Intcode()
-    INPUT_FILE = '../inputs/day2.txt'
+    INPUT_FILE = 'inputs/day2.txt'
     intcode.initial_state_from_file(INPUT_FILE)
 
     # Tasks

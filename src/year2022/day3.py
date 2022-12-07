@@ -16,7 +16,7 @@ def find_common(rucksacks: list[str]) -> str:
 
 
 if __name__ == "__main__":
-    with open("../inputs/day3.txt", "r") as file:
+    with open("inputs/day3.txt", "r") as file:
         lines = file.readlines()
 
     # part 1

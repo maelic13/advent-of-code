@@ -1,5 +1,5 @@
 if __name__ == "__main__":
-    with open("../inputs/day1.txt", "r") as file:
+    with open("inputs/day1.txt", "r") as file:
         lines = file.readlines()
 
     elves_calories: list[list[int]] = [[]]

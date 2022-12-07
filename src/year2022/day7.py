@@ -129,7 +129,7 @@ class Directory:
 
 
 if __name__ == "__main__":
-    with open("../inputs/day7.txt", "r") as FILE:
+    with open("inputs/day7.txt", "r") as FILE:
         commands = FILE.readlines()
 
     filesystem = Directory(Path())

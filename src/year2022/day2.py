@@ -53,7 +53,7 @@ class RPSPlayer:
 
 
 if __name__ == "__main__":
-    with open("../inputs/day2.txt", "r") as file:
+    with open("inputs/day2.txt", "r") as file:
         lines = file.readlines()
 
     data: list[list[str]] = []

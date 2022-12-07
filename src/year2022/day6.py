@@ -6,7 +6,7 @@ def are_chars_unique(characters: str) -> bool:
 
 
 if __name__ == "__main__":
-    with open("../inputs/day6.txt", "r") as file:
+    with open("inputs/day6.txt", "r") as file:
         DATASTREAM = file.readline().strip()
 
     # part 1
