@@ -71,12 +71,16 @@ class BoardingHelper:
         return needed_neighbours == 0
 
 
+def advent5() -> None:
+    input_data = DataReader.read_txt("day5.txt", str)
+    helper = BoardingHelper.from_text(input_data)
+
+    hid = helper.get_highest_seat_id()
+    print(f"Task 1: Highest seat id: {hid}")
+
+    my_seat_id = helper.find_my_seat()
+    print(f"Task 2: My seat id: {my_seat_id}")
+
+
 if __name__ == "__main__":
-    INPUT_DATA = DataReader.read_txt("day5.txt", str)
-    helper = BoardingHelper.from_text(INPUT_DATA)
-
-    HID = helper.get_highest_seat_id()
-    print(f"Task 1: Highest seat id: {HID}")
-
-    MY_SEAT_ID = helper.find_my_seat()
-    print(f"Task 2: My seat id: {MY_SEAT_ID}")
+    advent5()

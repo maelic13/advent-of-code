@@ -52,7 +52,7 @@ class RPSPlayer:
         return cls.evaluate(move, opponent_move)
 
 
-if __name__ == "__main__":
+def advent2() -> None:
     with open("inputs/day2.txt", "r") as file:
         lines = file.readlines()
 
@@ -61,13 +61,17 @@ if __name__ == "__main__":
         data.append(line.rstrip().split(" "))
 
     # part 1
-    TOTAL_SCORE = 0
+    total_score = 0
     for opponent_choice, choice in data:
-        TOTAL_SCORE += RPSPlayer.evaluate(choice, opponent_choice)
-    print(TOTAL_SCORE)
+        total_score += RPSPlayer.evaluate(choice, opponent_choice)
+    print(total_score)
 
     # part 2
-    TOTAL_SCORE = 0
+    total_score = 0
     for opponent_choice, game_result in data:
-        TOTAL_SCORE += RPSPlayer.evaluate_with_result(opponent_choice, game_result)
-    print(TOTAL_SCORE)
+        total_score += RPSPlayer.evaluate_with_result(opponent_choice, game_result)
+    print(total_score)
+
+
+if __name__ == "__main__":
+    advent2()

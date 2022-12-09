@@ -11,15 +11,19 @@ def count_increases(measurements: list[int]) -> int:
     return increased
 
 
-if __name__ == "__main__":
+def advent1() -> None:
     data = DataReader.read_txt("day1.txt", int)
 
-    SINGLE_INCREASES = count_increases(data)
-    print(f"Measurement increased {SINGLE_INCREASES} times in single mode.")
+    single_increases = count_increases(data)
+    print(f"Measurement increased {single_increases} times in single mode.")
 
     sliding_window_sum: list[int] = []
     for i in range(3, len(data) + 3):
         sliding_window_sum.append(sum(data[(i - 3):i]))
 
-    SLIDING_WINDOW_INCREASES = count_increases(sliding_window_sum)
-    print(f"Measurement increased {SLIDING_WINDOW_INCREASES} times in sliding window mode.")
+    sliding_window_increases = count_increases(sliding_window_sum)
+    print(f"Measurement increased {sliding_window_increases} times in sliding window mode.")
+
+
+if __name__ == "__main__":
+    advent1()

@@ -16,23 +16,27 @@ def count_trees_hit(slope_map: list[str], current_pos: np.ndarray, slope: np.nda
     return trees_hit
 
 
-if __name__ == "__main__":
-    INPUT_DATA = DataReader.read_txt("day3.txt", str)
+def advent3() -> None:
+    input_data = DataReader.read_txt("day3.txt", str)
 
-    SINGLE_SLOPE = np.array((3, 1))
-    RESULT = count_trees_hit(INPUT_DATA, np.array((0, 0)), SINGLE_SLOPE)
-    print(f"With slope {(3, 1)} you hit {RESULT} trees.")
+    single_slope = np.array((3, 1))
+    result = count_trees_hit(input_data, np.array((0, 0)), single_slope)
+    print(f"With slope {(3, 1)} you hit {result} trees.")
 
-    RESULT_LIST = [RESULT]
-    SLOPES = [
+    result_list = [result]
+    slopes = [
         np.array((1, 1)),
         np.array((5, 1)),
         np.array((7, 1)),
         np.array((1, 2))
     ]
-    for SINGLE_SLOPE in SLOPES:
-        RESULT = count_trees_hit(INPUT_DATA, np.array((0, 0)), SINGLE_SLOPE)
-        RESULT_LIST.append(RESULT)
-    RESULT_MULTI = np.prod(RESULT_LIST)
-    print(f"\nWith multiple additional slopes, result is {RESULT_MULTI} trees.")
-    print(f"Step results are: {RESULT_LIST}")
+    for single_slope in slopes:
+        result = count_trees_hit(input_data, np.array((0, 0)), single_slope)
+        result_list.append(result)
+    result_multi = np.prod(result_list)
+    print(f"\nWith multiple additional slopes, result is {result_multi} trees.")
+    print(f"Step results are: {result_list}")
+
+
+if __name__ == "__main__":
+    advent3()

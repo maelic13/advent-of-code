@@ -16,7 +16,7 @@ def find_overlap(sectors: list[list[int]]):
     return sorted(overlap_elements)
 
 
-if __name__ == "__main__":
+def advent4() -> None:
     with open("inputs/day4.txt", "r") as file:
         lines = file.readlines()
 
@@ -32,11 +32,15 @@ if __name__ == "__main__":
     print(complete_overlap_counter)
 
     # part 2
-    COUNTER = 0
+    counter = 0
     for line in lines:
         first, second = line.strip().split(",")
         first_sectors = convert(first)
         second_sectors = convert(second)
         if find_overlap([first_sectors, second_sectors]):
-            COUNTER += 1
-    print(COUNTER)
+            counter += 1
+    print(counter)
+
+
+if __name__ == "__main__":
+    advent4()

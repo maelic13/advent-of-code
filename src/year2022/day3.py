@@ -15,7 +15,7 @@ def find_common(rucksacks: list[str]) -> str:
     raise RuntimeError("No common item in rucksacks!")
 
 
-if __name__ == "__main__":
+def advent3() -> None:
     with open("inputs/day3.txt", "r") as file:
         lines = file.readlines()
 
@@ -34,3 +34,7 @@ if __name__ == "__main__":
         errors.append(find_common(lines[i:i + 3]))
         i += 3
     print(evaluate_prio(errors))
+
+
+if __name__ == "__main__":
+    advent3()

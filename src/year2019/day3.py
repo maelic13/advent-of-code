@@ -91,9 +91,9 @@ class FrontPanel:
                 self.fewest_steps = fewest_steps
 
 
-if __name__ == "__main__":
-    INPUT_FILE = "inputs/day3.txt"
-    panel = FrontPanel.from_file(INPUT_FILE)
+def advent3() -> None:
+    input_file = "inputs/day3.txt"
+    panel = FrontPanel.from_file(input_file)
 
     panel.calculate_intersections()
     panel.calculate_closest_intersection()
@@ -104,3 +104,7 @@ if __name__ == "__main__":
           f"Distance to closest intersection: {panel.dist_to_closest}\n"
           f"Quickest intersection: {panel.quickest_intersection}\n"
           f"Fewest steps to intersection: {panel.fewest_steps}\n")
+
+
+if __name__ == "__main__":
+    advent3()

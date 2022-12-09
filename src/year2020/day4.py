@@ -57,11 +57,15 @@ def validate_field(field: str) -> bool:
     return False
 
 
-if __name__ == "__main__":
-    INPUT_DATA = DataReader.read_txt_in_batch("day4.txt")
-    REQUIRED_FIELDS = ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"]
-    VALID_PASSPORTS = count_valid_passports(INPUT_DATA, REQUIRED_FIELDS)
-    print(f"Number of valid passports counting in those without cid: {VALID_PASSPORTS}.")
+def advent4() -> None:
+    input_data = DataReader.read_txt_in_batch("day4.txt")
+    required_fields = ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"]
+    valid_passports = count_valid_passports(input_data, required_fields)
+    print(f"Number of valid passports counting in those without cid: {valid_passports}.")
 
-    VALID_STRICT = count_valid_passports(INPUT_DATA, REQUIRED_FIELDS, strict=True)
-    print(f"Number of strictly valid passports counting in those without cid: {VALID_STRICT}.")
+    valid_strict = count_valid_passports(input_data, required_fields, strict=True)
+    print(f"Number of strictly valid passports counting in those without cid: {valid_strict}.")
+
+
+if __name__ == "__main__":
+    advent4()

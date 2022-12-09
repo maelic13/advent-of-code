@@ -45,7 +45,7 @@ class Cargo:
         return "".join([x[-1] for x in self.stacks])
 
 
-if __name__ == "__main__":
+def advent5() -> None:
     with open("inputs/day5.txt", "r") as file:
         lines = file.readlines()
 
@@ -62,3 +62,7 @@ if __name__ == "__main__":
     for move in moves:
         cargo.move_crates_9001(move)
     print(cargo.get_topmost_crates())
+
+
+if __name__ == "__main__":
+    advent5()

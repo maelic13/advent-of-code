@@ -62,10 +62,10 @@ def task2(computer: Intcode) -> int:
     raise RuntimeError("Computation of task 2 unsuccessful.")
 
 
-if __name__ == "__main__":
+def advent2() -> None:
     intcode = Intcode()
-    INPUT_FILE = 'inputs/day2.txt'
-    intcode.initial_state_from_file(INPUT_FILE)
+    input_file = 'inputs/day2.txt'
+    intcode.initial_state_from_file(input_file)
 
     # Tasks
     result_task1 = task1(intcode, 12, 2)
@@ -74,3 +74,7 @@ if __name__ == "__main__":
     # Results
     print(f"Task 1: Original state before catching fire was: {result_task1}")
     print(f"Task 2: Computed error code is: {result_task2}")
+
+
+if __name__ == "__main__":
+    advent2()

@@ -3,11 +3,9 @@ def parse_forest(x_coord: int, y_coord: int, forest: list[list[int]]
     horizontal = forest[x_coord]
     vertical = [x[y_coord] for x in forest]
 
-    left = horizontal[:y_coord]
-    left.reverse()
+    left = list(reversed(horizontal[:y_coord]))
     right = horizontal[y_coord + 1:]
-    upwards = vertical[:x_coord]
-    upwards.reverse()
+    upwards = list(reversed(vertical[:x_coord]))
     downwards = vertical[x_coord + 1:]
 
     return left, right, upwards, downwards
@@ -40,25 +38,29 @@ def scenic_score(x_coord: int, y_coord: int, forest: list[list[int]]) -> int:
     return score
 
 
-if __name__ == "__main__":
-    with open("inputs/day8.txt", "r") as FILE:
-        LINES = FILE.readlines()
+def advent8() -> None:
+    with open("inputs/day8.txt", "r") as file:
+        lines = file.readlines()
 
-    FOREST: list[list[int]] = []
-    for LINE in LINES:
-        FOREST.append([int(char) for char in LINE.strip()])
+    forest: list[list[int]] = []
+    for line in lines:
+        forest.append([int(char) for char in line.strip()])
 
     # part 1
-    COUNTER = 0
-    for X, TREE_LINE in enumerate(FOREST):
-        for Y, _ in enumerate(TREE_LINE):
-            if visible(X, Y, FOREST):
-                COUNTER += 1
-    print(COUNTER)
+    counter = 0
+    for x_coord, tree_line in enumerate(forest):
+        for y_coord, _ in enumerate(tree_line):
+            if visible(x_coord, y_coord, forest):
+                counter += 1
+    print(counter)
 
     # part 2
-    SCENIC_SCORES: list[int] = []
-    for X, TREE_LINE in enumerate(FOREST):
-        for Y, _ in enumerate(TREE_LINE):
-            SCENIC_SCORES.append(scenic_score(X, Y, FOREST))
-    print(max(SCENIC_SCORES))
+    scenic_scores: list[int] = []
+    for x_coord, tree_line in enumerate(forest):
+        for y_coord, _ in enumerate(tree_line):
+            scenic_scores.append(scenic_score(x_coord, y_coord, forest))
+    print(max(scenic_scores))
+
+
+if __name__ == "__main__":
+    advent8()

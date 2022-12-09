@@ -48,10 +48,14 @@ class PositionalPasswordValidator(PasswordValidator):
                 or password[par1 - 1] != symbol and password[par2 - 1] == symbol)
 
 
-if __name__ == "__main__":
-    DATA = DataReader.read_txt("day2.txt", str)
-    SOLUTION = SumPasswordValidator().count_valid_passwords(DATA)
-    print(F"Number of valid passwords method sum: {SOLUTION}")
+def advent2() -> None:
+    data = DataReader.read_txt("day2.txt", str)
+    solution = SumPasswordValidator().count_valid_passwords(data)
+    print(F"Number of valid passwords method sum: {solution}")
 
-    SOLUTION = PositionalPasswordValidator().count_valid_passwords(DATA)
-    print(F"Number of valid passwords method position: {SOLUTION}")
+    solution = PositionalPasswordValidator().count_valid_passwords(data)
+    print(F"Number of valid passwords method position: {solution}")
+
+
+if __name__ == "__main__":
+    advent2()

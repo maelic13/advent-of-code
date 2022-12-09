@@ -22,12 +22,16 @@ class QuestionnaireHelper:
         return result
 
 
+def advent6() -> None:
+    input_data = DataReader.read_txt_in_batch("day6.txt")
+    helper = QuestionnaireHelper(input_data)
+
+    unique_sum = helper.count_group_answers("unique")
+    print(f"Task 1: Sum of unique group answers: {unique_sum}")
+
+    common_sum = helper.count_group_answers("common")
+    print(f"Task 2: Sum of common group answers: {common_sum}")
+
+
 if __name__ == "__main__":
-    INPUT_DATA = DataReader.read_txt_in_batch("day6.txt")
-    helper = QuestionnaireHelper(INPUT_DATA)
-
-    UNIQUE_SUM = helper.count_group_answers("unique")
-    print(f"Task 1: Sum of unique group answers: {UNIQUE_SUM}")
-
-    COMMON_SUM = helper.count_group_answers("common")
-    print(f"Task 2: Sum of common group answers: {COMMON_SUM}")
+    advent6()

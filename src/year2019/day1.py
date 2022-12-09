@@ -30,11 +30,15 @@ def calculate_fuel_requirements(input_file: str) -> tuple[int, int]:
     return get_all_modules_fuel(list_of_mass)
 
 
-if __name__ == "__main__":
-    INPUT_FILE = 'inputs/day1.txt'
-    fuel_mass, fuel_mass_including_fuel = calculate_fuel_requirements(INPUT_FILE)
+def advent1() -> None:
+    input_file = 'inputs/day1.txt'
+    fuel_mass, fuel_mass_including_fuel = calculate_fuel_requirements(input_file)
     print(f"Fuel required for all the modules: {fuel_mass}\n"
           f"Fuel required for all modules, counting in the weight "
           f"of the fuel: {fuel_mass_including_fuel}\n"
           f"We would have {(1 - fuel_mass/fuel_mass_including_fuel)*100:.1f}% "
           f"less fuel than needed if we did not count in it's own weight!")
+
+
+if __name__ == "__main__":
+    advent1()

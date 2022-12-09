@@ -31,10 +31,14 @@ def calculate_position_with_aim(course: list[str],
     return distance, depth
 
 
-if __name__ == "__main__":
+def advent2() -> None:
     data = DataReader.read_txt("day2.txt", str)
     hor, dep = calculate_position(data)
     print(f"Multiplied horizontal and vertical positions: {hor * dep}.")
 
     hor2, dep2 = calculate_position_with_aim(data)
     print(f"Multiplied horizontal and vertical positions: {hor2 * dep2} with aim.")
+
+
+if __name__ == "__main__":
+    advent2()

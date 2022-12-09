@@ -128,9 +128,9 @@ class Directory:
         return directories
 
 
-if __name__ == "__main__":
-    with open("inputs/day7.txt", "r") as FILE:
-        commands = FILE.readlines()
+def advent7() -> None:
+    with open("inputs/day7.txt", "r") as file:
+        commands = file.readlines()
 
     filesystem = Directory(Path())
     current_path = Path()
@@ -147,19 +147,23 @@ if __name__ == "__main__":
             continue
         else:
             if "dir" in command:
-                _, DIR_NAME = command.strip().split(" ")
-                filesystem.add_directory(DIR_NAME, current_path)
+                _, dir_name = command.strip().split(" ")
+                filesystem.add_directory(dir_name, current_path)
             else:
-                SIZE, FILENAME = command.strip().split(" ")
-                filesystem.add_file(FILENAME, current_path, int(SIZE))
+                size, filename = command.strip().split(" ")
+                filesystem.add_file(filename, current_path, int(size))
 
     # part 1
-    SMALL_DIRS = filesystem.get_directories_by_max_size(100000)
-    print(sum(x.directory_size() for x in SMALL_DIRS))
+    small_dirs = filesystem.get_directories_by_max_size(100000)
+    print(sum(x.directory_size() for x in small_dirs))
 
     # part 2
-    TOTAL_SPACE = 70000000
-    MIN_SPACE_NEEDED = 30000000
-    MINIMAL_SIZE_TO_DELETE = MIN_SPACE_NEEDED - (TOTAL_SPACE - filesystem.directory_size())
-    BIG_DIRS = filesystem.get_directories_by_min_size(MINIMAL_SIZE_TO_DELETE)
-    print(min(x.directory_size() for x in BIG_DIRS))
+    total_space = 70000000
+    min_space_needed = 30000000
+    minimal_size_to_delete = min_space_needed - (total_space - filesystem.directory_size())
+    big_dirs = filesystem.get_directories_by_min_size(minimal_size_to_delete)
+    print(min(x.directory_size() for x in big_dirs))
+
+
+if __name__ == "__main__":
+    advent7()
