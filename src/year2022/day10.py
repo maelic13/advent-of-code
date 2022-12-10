@@ -58,10 +58,7 @@ def advent10() -> None:
         crt[tick // 40].append(char)
 
     for pixel_row in crt:
-        pixels = ""
-        for pixel in pixel_row:
-            pixels += pixel
-        print(pixels)
+        print("".join(pixel for pixel in pixel_row))
 
 
 if __name__ == "__main__":
