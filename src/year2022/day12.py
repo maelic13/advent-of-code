@@ -11,44 +11,28 @@ class Map:
         self.start = start
         self.goal = goal
 
-    def find_path(self) -> list[tuple[int, ...]]:
-        return self.astar(self.start, self.goal)
-
-    @staticmethod
-    def heuristic(position: tuple[int, ...], goal: tuple[int, ...]) -> float:
-        return sum(np.array(goal) - np.array(position))
-
-    @staticmethod
-    def reconstruct_path(came_from: dict[tuple[int, ...], tuple[int, ...]], current: tuple[int, ...]
-                         ) -> list[tuple[int, ...]]:
-        total_path = [current]
-        while current in came_from.keys():
-            current = came_from[current]
-            total_path.append(current)
-        return list(reversed(total_path))
-
-    def astar(self, start: tuple[int, ...], goal: tuple[int, ...]) -> list[tuple[int, ...]]:
-        open_set = {start}
+    def find_path(self) -> tuple[list[tuple[int, ...]], float]:
+        open_set = {self.start}
         came_from: dict[tuple[int, ...], tuple[int, ...]] = {}
-        g_score: dict[tuple[int, ...], float] = {start: 0}
-        f_score = {start: self.heuristic(start, goal)}
+        g_score: dict[tuple[int, ...], float] = {self.start: 0}
+        f_score = {self.start: self.heuristic(self.start, self.goal)}
 
         while open_set:
             current = min(open_set, key=lambda x: f_score[x])
-            if np.all(current == goal):
-                return self.reconstruct_path(came_from, current)
+            if current == self.goal:
+                return self.reconstruct_path(came_from, current), f_score[current]
 
             open_set.remove(current)
             for neighbor in self.get_neighbors(current):
-                tentative_g_score = g_score.get(current, np.inf) + 1
-                if tentative_g_score < g_score.get(neighbor, np.inf):
+                tentative_g_score = g_score.get(current, float("inf")) + 1
+                if tentative_g_score < g_score.get(neighbor, float("inf")):
                     came_from[neighbor] = current
                     g_score[neighbor] = tentative_g_score
-                    f_score[neighbor] = tentative_g_score + self.heuristic(neighbor, goal)
+                    f_score[neighbor] = tentative_g_score + self.heuristic(neighbor, self.goal)
                     if neighbor not in open_set:
                         open_set.add(neighbor)
 
-        return []
+        return [], float("inf")
 
     def get_neighbors(self, original_position: tuple[int, ...]) -> list[tuple[int, ...]]:
         possible_moves: list[np.ndarray] = []
@@ -72,20 +56,33 @@ class Map:
             possible_moves.append(np.array((position[0], position[1] + 1)) - position)
         return [tuple(position + x) for x in possible_moves]
 
+    @staticmethod
+    def heuristic(position: tuple[int, ...], goal: tuple[int, ...]) -> float:
+        return sum(goal) - sum(position)
 
-def finder(area_map: Map) -> list[tuple[int, ...]]:
+    @staticmethod
+    def reconstruct_path(came_from: dict[tuple[int, ...], tuple[int, ...]], current: tuple[int, ...]
+                         ) -> list[tuple[int, ...]]:
+        total_path = [current]
+        while current in came_from.keys():
+            current = came_from[current]
+            total_path.append(current)
+        return list(reversed(total_path))
+
+
+def finder(area_map: Map) -> tuple[list[tuple[int, ...]], float]:
     return area_map.find_path()
 
 
 def find_shortest_path(grid: list[list[int]], start_points: list[tuple[int, ...]],
-                       end_point: tuple[int, ...]) -> tuple[list[tuple[int, ...]], int]:
+                       end_point: tuple[int, ...]) -> tuple[list[tuple[int, ...]], float]:
     maps = [Map(grid, start_point, end_point) for start_point in start_points]
     with Pool() as pool:
         results = pool.map(finder, maps)
         pool.close()
         pool.join()
-    best_path = min(results, key=lambda x: len(x) if x else np.inf)
-    return best_path, len(best_path) - 1
+    best_path, steps = min(results, key=lambda x: x[1])
+    return best_path, steps
 
 
 def parse_map_data(map_data: list[str]) -> tuple[list[list[int]], tuple[int, ...], tuple[int, ...]]:
