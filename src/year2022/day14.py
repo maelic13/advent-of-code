@@ -7,6 +7,7 @@ class Cave:
     def __init__(self, rocks: set[tuple[int, ...]], ground_level: bool = False) -> None:
         self.finished = False
         self.ground_level: Optional[int] = max(x[1] for x in rocks) + 2 if ground_level else None
+        self.intersections: list[tuple[int, ...]] = []
         self.rocks = rocks
         self.sand: set[tuple[int, ...]] = set()
         self.sand_entry_point = (500, 0)
@@ -74,20 +75,25 @@ class Cave:
         if self.finished:
             return False
 
-        position = np.array(self.sand_entry_point)
+        position = (np.array(self.intersections[-1])
+                    if self.intersections else np.array(self.sand_entry_point))
         while True:
-            new_position = self.drop_down(position)
-            if new_position is None:
+            position = self.drop_down(position)
+            if position is None:
                 return False
+            if not tuple(position) in self.intersections:
+                self.intersections.append(tuple(position))
             for step in [np.array((-1, 1)), np.array((1, 1))]:
-                if (tuple(new_position + step) in self.rocks.union(self.sand)
-                        or (new_position + step)[1] == self.ground_level):
+                if (tuple(position + step) in self.rocks.union(self.sand)
+                        or (position + step)[1] == self.ground_level):
+                    new_position = position
                     continue
-                new_position += step
+                new_position = position + step
                 break
             if np.all(new_position == position):
                 if tuple(position) == self.sand_entry_point:
                     self.finished = True
+                self.intersections.remove(tuple(new_position))
                 break
             position = new_position
         self.sand.add(tuple(position))
@@ -106,7 +112,7 @@ class Cave:
 
 
 def advent14() -> None:
-    with open("inputs/day14.txt", "r") as file:
+    with open("inputs/day14_test.txt", "r") as file:
         lines = file.readlines()
     cave = Cave.from_txt(lines)
 
