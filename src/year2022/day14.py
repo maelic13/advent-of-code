@@ -54,7 +54,7 @@ class Cave:
 
     def reset(self) -> None:
         self.finished = False
-        self.ground_level = np.inf
+        self.ground_level = None
         self.sand = set()
 
     def activate_ground(self) -> None:
@@ -78,10 +78,10 @@ class Cave:
         position = (np.array(self.intersections[-1])
                     if self.intersections else np.array(self.sand_entry_point))
         while True:
-            position = self.drop_down(position)
+            position = self.drop_down(position)  # type: ignore
             if position is None:
                 return False
-            if not tuple(position) in self.intersections:
+            if tuple(position) not in self.intersections:
                 self.intersections.append(tuple(position))
             for step in [np.array((-1, 1)), np.array((1, 1))]:
                 if (tuple(position + step) in self.rocks.union(self.sand)
