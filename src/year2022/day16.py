@@ -1,3 +1,6 @@
+from multiprocessing import Pool
+
+from more_itertools import set_partitions
 import numpy as np
 
 
@@ -65,14 +68,10 @@ class ValveSystem:
                 return valve
         raise RuntimeError(f"No valve with name {name} found.")
 
-    def find_by_index(self, index: int) -> Valve:
-        for valve in self.valves:
-            if valve.index == index:
-                return valve
-        raise RuntimeError(f"No valve with index {index} found.")
-
-    def search(self, valve: Valve, score, time: int
-               ) -> tuple[int, list[Valve]]:
+    # pylint: disable=too-many-arguments
+    @classmethod
+    def search(cls, valve: Valve, valves: list[Valve], valve_distances: np.matrix, score,
+               time: int) -> int:
         if time <= 0:
             return score
 
@@ -82,13 +81,31 @@ class ValveSystem:
             score += time * valve.flow_rate
 
         best_score = score
-        for target_valve in [v for v in self.valves if not v.is_open and v.flow_rate > 0]:
-            temp_score = self.search(
-                target_valve, score, time - self.valve_distances[valve.index, target_valve.index])
+        for target_valve in [v for v in valves if not v.is_open]:
+            temp_score = cls.search(
+                target_valve, valves, valve_distances, score,
+                time - valve_distances[valve.index, target_valve.index])
             if temp_score > best_score:
                 best_score = temp_score
         valve.close()
         return best_score
+
+    def multiple_path_score(self, valve: Valve, valves: list[list[Valve]],
+                            valve_distances: np.matrix, time: int) -> int:
+        score = 0
+        for path in valves:
+            score += self.search(valve, path, valve_distances, 0, time)
+        return score
+
+    def optimal_path_score(self, time: int, players: int = 1) -> int:
+        useful_valves = [v for v in self.valves if v.flow_rate > 0]
+        inputs = ((self.find_by_name("AA"), valves, self.valve_distances, time)
+                  for valves in set_partitions(useful_valves, k=players))
+        with Pool() as pool:
+            results = pool.starmap(self.multiple_path_score, inputs)
+            pool.close()
+            pool.join()
+        return max(results)
 
 
 def advent16() -> None:
@@ -112,9 +129,10 @@ def advent16() -> None:
     valve_system.find_by_name("AA").open()
 
     # part 1
-    time = 30
-    pressure_released = valve_system.search(valve_system.find_by_name("AA"), 0, time)
-    print(pressure_released)
+    print(valve_system.optimal_path_score(30))
+
+    # part 2
+    print(valve_system.optimal_path_score(26, players=2))
 
 
 if __name__ == "__main__":
