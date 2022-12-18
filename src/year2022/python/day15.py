@@ -111,7 +111,7 @@ class AreaMap:
 
 
 def advent15() -> None:
-    with open("inputs/day15.txt", "r") as file:
+    with open("../inputs/day15.txt", "r") as file:
         lines = file.readlines()
 
     sensors: list[Sensor] = []

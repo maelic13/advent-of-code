@@ -39,7 +39,7 @@ class CPU:
 
 
 def advent10() -> None:
-    with open("inputs/day10.txt", "r") as file:
+    with open("../inputs/day10.txt", "r") as file:
         commands = file.readlines()
 
     # part 1

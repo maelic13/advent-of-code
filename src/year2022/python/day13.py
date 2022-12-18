@@ -23,7 +23,7 @@ def compare(item1, item2) -> int:
 
 
 def advent13() -> None:
-    with open("inputs/day13.txt", "r") as file:
+    with open("../inputs/day13.txt", "r") as file:
         lines = file.readlines()
 
     i = 0

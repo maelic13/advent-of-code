@@ -52,7 +52,7 @@ class Simulation:
 
 
 def advent9() -> None:
-    with open("inputs/day9.txt", "r") as file:
+    with open("../inputs/day9.txt", "r") as file:
         lines = file.readlines()
 
     # part 1

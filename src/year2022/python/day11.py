@@ -66,7 +66,7 @@ def go_rounds(orig_monkeys: list[Monkey], rounds: int) -> list[Monkey]:
 
 
 def advent11() -> None:
-    with open("inputs/day11.txt", "r") as file:
+    with open("../inputs/day11.txt", "r") as file:
         lines = file.readlines()
 
     i = 0

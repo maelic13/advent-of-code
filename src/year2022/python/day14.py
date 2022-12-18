@@ -112,7 +112,7 @@ class Cave:
 
 
 def advent14() -> None:
-    with open("inputs/day14.txt", "r") as file:
+    with open("../inputs/day14.txt", "r") as file:
         lines = file.readlines()
     cave = Cave.from_txt(lines)
 

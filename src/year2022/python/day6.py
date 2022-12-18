@@ -6,7 +6,7 @@ def are_chars_unique(characters: str) -> bool:
 
 
 def advent6() -> None:
-    with open("inputs/day6.txt", "r") as file:
+    with open("../inputs/day6.txt", "r") as file:
         datastream = file.readline().strip()
 
     # part 1

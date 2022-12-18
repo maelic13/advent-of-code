@@ -39,7 +39,7 @@ def scenic_score(x_coord: int, y_coord: int, forest: list[list[int]]) -> int:
 
 
 def advent8() -> None:
-    with open("inputs/day8.txt", "r") as file:
+    with open("../inputs/day8.txt", "r") as file:
         lines = file.readlines()
 
     forest: list[list[int]] = []

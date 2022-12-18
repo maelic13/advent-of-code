@@ -46,7 +46,7 @@ class Cargo:
 
 
 def advent5() -> None:
-    with open("inputs/day5.txt", "r") as file:
+    with open("../inputs/day5.txt", "r") as file:
         lines = file.readlines()
 
     cargo = Cargo.from_text(lines[:lines.index("\n")])

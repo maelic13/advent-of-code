@@ -129,7 +129,7 @@ class Directory:
 
 
 def advent7() -> None:
-    with open("inputs/day7.txt", "r") as file:
+    with open("../inputs/day7.txt", "r") as file:
         commands = file.readlines()
 
     filesystem = Directory(Path())

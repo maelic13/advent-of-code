@@ -1,4 +1,5 @@
 from itertools import product
+from time import time_ns
 
 
 class RPSPlayer:
@@ -53,7 +54,7 @@ class RPSPlayer:
 
 
 def advent2() -> None:
-    with open("inputs/day2.txt", "r") as file:
+    with open("../inputs/day2.txt", "r") as file:
         lines = file.readlines()
 
     data: list[list[str]] = []
@@ -74,4 +75,6 @@ def advent2() -> None:
 
 
 if __name__ == "__main__":
+    start = time_ns()
     advent2()
+    print(f"Execution time: {round((time_ns() - start) // 1000)} microseconds.")

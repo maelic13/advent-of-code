@@ -106,7 +106,7 @@ def parse_map_data(map_data: list[str]) -> tuple[list[list[int]], tuple[int, ...
 
 
 def advent12() -> None:
-    with open("inputs/day12.txt", "r") as file:
+    with open("../inputs/day12.txt", "r") as file:
         lines = file.readlines()
 
     grid, start, goal = parse_map_data(lines)

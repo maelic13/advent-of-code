@@ -109,7 +109,7 @@ class ValveSystem:
 
 
 def advent16() -> None:
-    with open("inputs/day16.txt", "r") as file:
+    with open("../inputs/day16.txt", "r") as file:
         lines = file.readlines()
 
     valves: list[Valve] = []
