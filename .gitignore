@@ -1,8 +1,7 @@
 # folders
 .idea
 .mypy_cache
-cmake-build-debug
-cmake-build-release
+cmake-build*
 venv
 
 # files

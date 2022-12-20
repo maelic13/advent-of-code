@@ -1,4 +1,5 @@
 from multiprocessing import cpu_count, Pool
+from time import time
 
 
 import numpy as np
@@ -124,14 +125,18 @@ def advent15() -> None:
     area_map = AreaMap(sensors)
 
     # part 1
+    start = time()
     y_coord = 2000000
     known_empty = area_map.find_empty(y_coord)
     print(len(known_empty))
+    print(f"Part 1 execution time: {round((time() - start))} seconds.")
 
     # part 2
+    start = time()
     limit = (0, 4000000)
     unknown = area_map.find_unknown(limit)
     print(unknown[0] * 4000000 + unknown[1])
+    print(f"Part 2 execution time: {round((time() - start))} seconds.")
 
 
 if __name__ == "__main__":

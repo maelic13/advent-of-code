@@ -1,4 +1,5 @@
 from multiprocessing import Pool
+from time import time
 
 from more_itertools import set_partitions
 import numpy as np
@@ -129,10 +130,14 @@ def advent16() -> None:
     valve_system.find_by_name("AA").open()
 
     # part 1
+    start = time()
     print(valve_system.optimal_path_score(30))
+    print(f"Part 1 execution time: {round((time() - start))} seconds.")
 
     # part 2
+    start = time()
     print(valve_system.optimal_path_score(26, players=2))
+    print(f"Part 2 execution time: {round((time() - start))} seconds.")
 
 
 if __name__ == "__main__":
