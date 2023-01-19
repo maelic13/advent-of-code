@@ -19,14 +19,14 @@ public:
     int paper_score = 2;
     int scissors_score = 3;
 
-    vector<tuple<string, string>> wins = {{"A", "C"}, {"B", "A"}, {"C", "B"}};
-    vector<tuple<string, string>> draws = {{"A", "A"}, {"B", "B"}, {"C", "C"}};
-    vector<tuple<string, string>> losses = {{"C", "A"}, {"A", "B"}, {"B", "C"}};
+    vector<tuple<char, char>> wins = {{'A', 'C'}, {'B', 'A'}, {'C', 'B'}};
+    vector<tuple<char, char>> draws = {{'A', 'A'}, {'B', 'B'}, {'C', 'C'}};
+    vector<tuple<char, char>> losses = {{'C', 'A'}, {'A', 'B'}, {'B', 'C'}};
 
-    int evaluate(const string& player_move, const string& opponent_move) {
-        string translated_player_move = translate_move(player_move);
-        int score = get_move_score(translated_player_move);
-        tuple<string, string> move(translated_player_move, opponent_move);
+    int evaluate(const char opponent_move, char player_move) {
+        player_move = translate_move(player_move);
+        int score = get_move_score(player_move);
+        tuple<char, char> move(player_move, opponent_move);
 
         if (find(wins.begin(), wins.end(), move) != wins.end())
             score += win_score;
@@ -37,33 +37,33 @@ public:
         return score;
     }
 
-    static string translate_move(const string& move) {
-        if (move == "X" or move == "A") return "A";
-        if (move == "Y" or move == "B") return "B";
-        if (move == "Z" or move == "C") return "C";
-        throw runtime_error("Invalid move: " + move);
+    static char translate_move(const char move) {
+        if (move == 'X' or move == 'A') return 'A';
+        if (move == 'Y' or move == 'B') return 'B';
+        if (move == 'Z' or move == 'C') return 'C';
+        throw runtime_error(&"Invalid move: " [move]);
     }
 
-    [[nodiscard]] int get_move_score(const string& move) const {
-        if (move == "A") return rock_score;
-        if (move == "B") return paper_score;
-        if (move == "C") return scissors_score;
-        throw runtime_error("Invalid move: " + move);
+    [[nodiscard]] int get_move_score(char move) const {
+        if (move == 'A') return rock_score;
+        if (move == 'B') return paper_score;
+        if (move == 'C') return scissors_score;
+        throw runtime_error(&"Invalid move: " [move]);
     }
 
-    int evaluate_with_result(const string& opponent_move, const string& result) {
-        string move;
+    int evaluate_with_result(const char opponent_move, const char result) {
+        char move;
 
-        if (result == "X") {
-            for (tuple<string, string> loss : losses) {
+        if (result == 'X') {
+            for (tuple<char, char> loss : losses) {
                 if (get<1>(loss) == opponent_move) {
                     move = get<0>(loss);
                     break;
                 }
             }
         }
-        else if (result == "Y"){
-            for (tuple<string, string> draw : draws) {
+        else if (result == 'Y'){
+            for (tuple<char, char> draw : draws) {
                 if (get<1>(draw) == opponent_move) {
                     move = get<0>(draw);
                     break;
@@ -71,29 +71,16 @@ public:
             }
         }
         else {
-            for (tuple<string, string> win : wins) {
+            for (tuple<char, char> win : wins) {
                 if (get<1>(win) == opponent_move) {
                     move = get<0>(win);
                     break;
                 }
             }
         }
-        return evaluate(move, opponent_move);
+        return evaluate(opponent_move, move);
     }
 };
-
-
-vector<string> split(const string& line, char delimiter) {
-    stringstream stream(line);
-    string word;
-    vector<string> parsed = {};
-
-    while (!stream.eof()) {
-        getline(stream, word, delimiter);
-        parsed.push_back(word);
-    }
-    return parsed;
-}
 
 
 int main() {
@@ -102,17 +89,26 @@ int main() {
     // read and parse file
     ifstream file("inputs/2022/day2.txt");
     string line;
-    vector<vector<string>> data = {};
+    vector<string> data;
 
-    while (getline(file, line))
-        data.push_back(split(line, ' '));
+    while (getline(file, line)) {
+        string item;
+        const char* currentChar = line.c_str();
+
+        for (int i = 0; i < 3; i++) {
+            if (*currentChar != ' ')
+                item += *currentChar;
+            *currentChar++;
+        }
+        data.push_back(item);
+    }
     auto file_read_time = duration_cast<microseconds>(high_resolution_clock::now() - start).count();
 
     // part 1
     int total_score = 0;
     RPSPlayer game;
     for (auto choices: data) {
-        total_score += game.evaluate(choices[1], choices[0]);
+        total_score += game.evaluate(choices[0], choices[1]);
     }
     auto part1_time = duration_cast<microseconds>(high_resolution_clock::now() - start).count() - file_read_time;
     cout << total_score << endl;
