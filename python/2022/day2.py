@@ -78,9 +78,8 @@ def advent2() -> None:
     part2_time = round((time_ns() - start) // 1000) - part1_time - file_read_time
     print(total_score)
 
-    total_time = round((time_ns() - start) // 1000)
     print()
-    print(f"Total time: {total_time} microseconds.")
+    print(f"Total time: {file_read_time + part1_time + part2_time} microseconds.")
     print(f"File read time: {file_read_time} microseconds.")
     print(f"Execution time: {part1_time + part2_time} microseconds.")
     print()

@@ -1,5 +1,3 @@
-extern crate core;
-
 use std::fs::File;
 use std::io::{BufReader, BufRead};
 
@@ -107,12 +105,17 @@ impl RPSPlayer {
 fn main() {
     let watch = Stopwatch::start_new();
 
+    // read and parse file
     let file = File::open("../inputs/2022/day2.txt").unwrap();
     let reader = BufReader::new(file);
-    let mut data: Vec<String> = vec![];
+    let mut data: Vec<Vec<String>> = vec![];
 
     for line in reader.lines() {
-        data.push(line.unwrap());
+        let mut buff: Vec<String> = vec![];
+        for char in line.unwrap().split(" ") {
+            buff.push(char.to_string());
+        }
+        data.push(buff);
     }
     let file_read_time = watch.us();
 
@@ -120,8 +123,7 @@ fn main() {
     let mut total_score = 0;
     let game = RPSPlayer::default();
     for moves in &data {
-        let split_moves: Vec<&str> = moves.split(" ").collect();
-        total_score += game.evaluate(split_moves[1], split_moves[0]);
+        total_score += game.evaluate(&moves[1], &moves[0]);
     }
     let part1_time = watch.us() - file_read_time;
     println!("{}", total_score);
@@ -129,12 +131,12 @@ fn main() {
     // part 2
     total_score = 0;
     for moves in &data {
-        let split_moves: Vec<&str> = moves.split(" ").collect();
-        total_score += game.evaluate_with_result(split_moves[1], split_moves[0]);
+        total_score += game.evaluate_with_result(&moves[1], &moves[0]);
     }
     let part2_time = watch.us() - part1_time - file_read_time;
     println!("{}", total_score);
 
+    // report times
     println!();
     println!("Total time: {:.0} microseconds.", watch.us());
     println!("File read time: {:.0} microseconds.", file_read_time);

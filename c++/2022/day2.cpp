@@ -99,6 +99,7 @@ vector<string> split(const string& line, char delimiter) {
 int main() {
     auto start = high_resolution_clock::now();
 
+    // read and parse file
     ifstream file("inputs/2022/day2.txt");
     string line;
     vector<vector<string>> data = {};
@@ -123,9 +124,8 @@ int main() {
     auto part2_time = duration_cast<microseconds>(high_resolution_clock::now() - start).count() - part1_time - file_read_time;
     cout << total_score << endl;
 
-    auto total_time = duration_cast<microseconds>(high_resolution_clock::now() - start).count();
     cout << endl;
-    cout << "Total time: " << total_time << " microseconds." << endl;
+    cout << "Total time: " << file_read_time + part1_time + part2_time << " microseconds." << endl;
     cout << "File read time: " << file_read_time << " microseconds." << endl;
     cout << "Execution time: " << part1_time + part2_time << " microseconds." << endl;
     cout << endl;
