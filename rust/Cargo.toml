@@ -1,0 +1,15 @@
+[package]
+name = "advent-of-code"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "22_d1"
+path = "2022/day1.rs"
+
+[[bin]]
+name = "22_d2"
+path = "2022/day2.rs"
+
+[dependencies]
+simple-stopwatch = "0.1.4"
