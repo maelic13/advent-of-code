@@ -30,7 +30,8 @@ int main() {
 
     // part 1
     cout << *max_element(sums.begin(), sums.end()) << endl;
-    auto part1_time = duration_cast<microseconds>(high_resolution_clock::now() - start).count() - file_read_time;
+    auto part1_time = duration_cast<microseconds>(high_resolution_clock::now() - start).count()
+            - file_read_time;
 
 
     //part 2

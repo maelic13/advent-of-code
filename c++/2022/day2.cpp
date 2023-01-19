@@ -26,59 +26,49 @@ public:
     int evaluate(const char opponent_move, char player_move) {
         player_move = translate_move(player_move);
         int score = get_move_score(player_move);
-        tuple<char, char> move(player_move, opponent_move);
 
+        tuple<char, char> move(player_move, opponent_move);
         if (find(wins.begin(), wins.end(), move) != wins.end())
             score += win_score;
         else if (find(draws.begin(), draws.end(), move) != draws.end())
             score += draw_score;
-        else
+        else if (find(losses.begin(), losses.end(), move) != losses.end())
             score += lose_score;
+        else
+            throw runtime_error("Incorrect move vector.");
         return score;
+    }
+
+    int evaluate_with_result(const char opponent_move, const char result) {
+        char player_move;
+        vector<tuple<char, char>>* to_search;
+
+        if (result == 'X') { to_search = &losses; }
+        else if (result == 'Y') { to_search = &draws; }
+        else if (result == 'Z') { to_search = &wins; }
+        else { throw runtime_error("Incorrect result: " + to_string(result)); }
+
+        for (tuple<char, char> game_result: *to_search)
+            if (get<1>(game_result) == opponent_move) {
+                player_move = get<0>(game_result);
+                break;
+            }
+
+        return evaluate(opponent_move, player_move);
     }
 
     static char translate_move(const char move) {
         if (move == 'X' or move == 'A') return 'A';
         if (move == 'Y' or move == 'B') return 'B';
         if (move == 'Z' or move == 'C') return 'C';
-        throw runtime_error(&"Invalid move: " [move]);
+        throw runtime_error("Invalid move: " + to_string(move));
     }
 
     [[nodiscard]] int get_move_score(char move) const {
         if (move == 'A') return rock_score;
         if (move == 'B') return paper_score;
         if (move == 'C') return scissors_score;
-        throw runtime_error(&"Invalid move: " [move]);
-    }
-
-    int evaluate_with_result(const char opponent_move, const char result) {
-        char move;
-
-        if (result == 'X') {
-            for (tuple<char, char> loss : losses) {
-                if (get<1>(loss) == opponent_move) {
-                    move = get<0>(loss);
-                    break;
-                }
-            }
-        }
-        else if (result == 'Y'){
-            for (tuple<char, char> draw : draws) {
-                if (get<1>(draw) == opponent_move) {
-                    move = get<0>(draw);
-                    break;
-                }
-            }
-        }
-        else {
-            for (tuple<char, char> win : wins) {
-                if (get<1>(win) == opponent_move) {
-                    move = get<0>(win);
-                    break;
-                }
-            }
-        }
-        return evaluate(opponent_move, move);
+        throw runtime_error("Invalid move: " + to_string(move));
     }
 };
 
@@ -110,14 +100,16 @@ int main() {
     for (auto choices: data) {
         total_score += game.evaluate(choices[0], choices[1]);
     }
-    auto part1_time = duration_cast<microseconds>(high_resolution_clock::now() - start).count() - file_read_time;
+    auto part1_time = duration_cast<microseconds>(high_resolution_clock::now() - start).count()
+            - file_read_time;
     cout << total_score << endl;
 
     // part 2
     total_score = 0;
     for (auto inputs: data)
         total_score += game.evaluate_with_result(inputs[0], inputs[1]);
-    auto part2_time = duration_cast<microseconds>(high_resolution_clock::now() - start).count() - part1_time - file_read_time;
+    auto part2_time = duration_cast<microseconds>(high_resolution_clock::now() - start).count()
+            - part1_time - file_read_time;
     cout << total_score << endl;
 
     cout << endl;

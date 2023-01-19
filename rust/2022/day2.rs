@@ -43,7 +43,6 @@ impl RPSPlayer {
 
     fn evaluate(&self, player_move: &str, opponent_move: &str) -> usize {
         let player_move = RPSPlayer::translate_move(player_move);
-        let opponent_move = RPSPlayer::translate_move(opponent_move);
         let mut score = self.get_move_score(player_move);
 
         let move_vector = vec![player_move.to_string(), opponent_move.to_string()];
