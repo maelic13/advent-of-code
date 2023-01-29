@@ -1,8 +1,7 @@
 use std::fs::File;
-use std::io::{BufReader, BufRead};
+use std::io::{BufRead, BufReader};
 
 use simple_stopwatch::Stopwatch;
-
 
 fn main() {
     let watch = Stopwatch::start_new();
@@ -37,7 +36,10 @@ fn main() {
     println!();
     println!("Total time: {:.0} microseconds.", watch.us());
     println!("File read time: {:.0} microseconds.", file_read_time);
-    println!("Execution time: {:.0} microseconds.", part1_time + part2_time);
+    println!(
+        "Execution time: {:.0} microseconds.",
+        part1_time + part2_time
+    );
     println!();
     println!("Part 1 execution time: {:.0} microseconds.", part1_time);
     println!("Part 2 execution time: {:.0} microseconds.", part2_time);
