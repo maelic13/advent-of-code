@@ -14,7 +14,7 @@ fn main() {
 
     for line in reader.lines() {
         let line = line.unwrap();
-        if line == "" {
+        if line.is_empty() {
             sums.push(buff);
             buff = 0;
             continue;

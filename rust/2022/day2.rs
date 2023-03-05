@@ -63,8 +63,7 @@ impl RPSPlayer {
                 move_vector[0], move_vector[1]
             )
         }
-
-        return score;
+        score
     }
 
     fn evaluate_with_result(&self, result: &str, opponent_move: &str) -> usize {
@@ -92,8 +91,7 @@ impl RPSPlayer {
                 }
             }
         }
-
-        return self.evaluate(move_to_play, opponent_move);
+        self.evaluate(move_to_play, opponent_move)
     }
 
     fn translate_move(played_move: &str) -> &str {
@@ -133,7 +131,7 @@ fn main() {
 
     for line in reader.lines() {
         let mut buff: Vec<String> = vec![];
-        for char in line.unwrap().split(" ") {
+        for char in line.unwrap().split(' ') {
             buff.push(char.to_string());
         }
         data.push(buff);
