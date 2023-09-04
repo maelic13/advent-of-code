@@ -1,9 +1,11 @@
 # folders
-.idea
-.mypy_cache
+.idea/
+.mypy_cache/
+.vs/
+.vscode/
 cmake-build*
-target
-venv
+target/
+venv/
 
 # files
 *.pyc
