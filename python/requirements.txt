@@ -3,3 +3,4 @@ more-itertools
 mypy
 numpy
 pylint
+regex
