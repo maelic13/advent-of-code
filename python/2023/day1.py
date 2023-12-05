@@ -1,5 +1,6 @@
-from regex import findall
 from time import time_ns
+
+from regex import findall
 
 
 word_num = {
@@ -32,15 +33,8 @@ if __name__ == "__main__":
     with open("inputs/2023/day1.txt", "r") as file:
         lines = file.readlines()
 
-    # part 1
-    digits: list[int] = []
-    for line in lines:
-        found = findall('[1-9]', line.strip())
-        digits.append(int(found[0] + found[-1]))
-    print(sum(digits))
-
-    # part 2
-    digits: list[int] = []
+    task1: list[int] = []
+    task2: list[int] = []
     word_pattern = "|".join(word_num.keys())
     for line in lines:
         found_digits = findall('[1-9]', line.strip())
@@ -48,7 +42,13 @@ if __name__ == "__main__":
 
         first = min(found_digits + found_words, key=lambda x: line.index(x))
         last = max(found_digits + found_words, key=lambda x: line.rfind(x))
-        digits.append(word2int(first + last))
-    print(sum(digits))
+
+        task1.append(int(found_digits[0] + found_digits[-1]))
+        task2.append(word2int(first + last))
+
+    # part 1
+    print(sum(task1))
+    # part 2
+    print(sum(task2))
 
     print(f"Execution time: {round((time_ns() - start) // 1000)} microseconds.")
