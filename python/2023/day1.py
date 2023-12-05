@@ -51,4 +51,4 @@ if __name__ == "__main__":
     # part 2
     print(sum(task2))
 
-    print(f"Execution time: {round((time_ns() - start) // 1000)} microseconds.")
+    print(f"Execution time: {round((time_ns() - start) // 1000000)} milliseconds.")
