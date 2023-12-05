@@ -50,9 +50,9 @@ class Game:
 
     def min_necessary(self) -> Set:
         return Set(
-            max([game_set.red for game_set in self.sets]),
-            max([game_set.green for game_set in self.sets]),
-            max([game_set.blue for game_set in self.sets])
+            max(game_set.red for game_set in self.sets),
+            max(game_set.green for game_set in self.sets),
+            max(game_set.blue for game_set in self.sets)
         )
 
 
@@ -69,7 +69,7 @@ def day2() -> None:
         task2 += game.min_necessary().power()
 
     # part 1
-    print(sum([game.id for game in task1]))
+    print(sum(game.id for game in task1))
     # part 2
     print(task2)
 

@@ -22,8 +22,8 @@ def word2int(word: str) -> int:
     :param word: word to convert
     :return: integer
     """
-    for key in word_num:
-        word = word.replace(key, word_num[key])
+    for num_word, num in word_num.items():
+        word = word.replace(num_word, num)
     return int(word)
 
 
@@ -40,8 +40,8 @@ if __name__ == "__main__":
         found_digits = findall('[1-9]', line.strip())
         found_words = findall(word_pattern, line.strip(), overlapped=True)
 
-        first = min(found_digits + found_words, key=lambda x: line.index(x))
-        last = max(found_digits + found_words, key=lambda x: line.rfind(x))
+        first = min(found_digits + found_words, key=line.index)
+        last = max(found_digits + found_words, key=line.rfind)
 
         task1.append(int(found_digits[0] + found_digits[-1]))
         task2.append(word2int(first + last))
