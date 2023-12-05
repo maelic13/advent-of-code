@@ -77,4 +77,4 @@ def day2() -> None:
 if __name__ == "__main__":
     start = time_ns()
     day2()
-    print(f"Execution time: {round((time_ns() - start) // 1000000)} milliseconds.")
+    print(f"Execution time: {round((time_ns() - start) // 1000)} microseconds.")
