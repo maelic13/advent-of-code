@@ -1,4 +1,4 @@
-from infra import DataReader
+from time import time_ns
 
 
 def count_increases(measurements: list[int]) -> int:
@@ -12,7 +12,8 @@ def count_increases(measurements: list[int]) -> int:
 
 
 def advent1() -> None:
-    data = DataReader.read_txt("inputs/2021/day1.txt", int)
+    with open("inputs/2021/day1.txt", "r") as file:
+        data = [int(line.strip()) for line in file.readlines()]
 
     single_increases = count_increases(data)
     print(f"Measurement increased {single_increases} times in single mode.")
@@ -26,4 +27,6 @@ def advent1() -> None:
 
 
 if __name__ == "__main__":
+    start = time_ns()
     advent1()
+    print(f"Execution time: {round((time_ns() - start) // 1000000)} milliseconds.")

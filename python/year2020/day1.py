@@ -1,8 +1,7 @@
 from itertools import combinations
+from time import time_ns
 
 from numpy import prod
-
-from infra import DataReader
 
 
 def expense_record(item_list: list[int], number_of_items: int) -> int:
@@ -13,7 +12,9 @@ def expense_record(item_list: list[int], number_of_items: int) -> int:
 
 
 def advent1() -> None:
-    data = DataReader.read_txt("inputs/2020/day1.txt", int)
+    with open("inputs/2020/day1.txt", "r") as file:
+        data = [int(line.strip()) for line in file.readlines()]
+
     solution1 = expense_record(data, 2)
     print(f"Solution part 1 is: {solution1}")
 
@@ -22,4 +23,6 @@ def advent1() -> None:
 
 
 if __name__ == "__main__":
+    start = time_ns()
     advent1()
+    print(f"Execution time: {round((time_ns() - start) // 1000000)} milliseconds.")

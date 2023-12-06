@@ -1,7 +1,7 @@
 from math import gcd, prod
-import numpy as np
+from time import time_ns
 
-from infra import DataReader
+import numpy as np
 
 
 def count_trees_hit(slope_map: list[str], current_pos: np.ndarray, slope: np.ndarray) -> int:
@@ -17,10 +17,11 @@ def count_trees_hit(slope_map: list[str], current_pos: np.ndarray, slope: np.nda
 
 
 def advent3() -> None:
-    input_data = DataReader.read_txt("inputs/2020/day3.txt", str)
+    with open("inputs/2020/day3.txt", "r") as file:
+        data = file.readlines()
 
     single_slope = np.array((3, 1))
-    result = count_trees_hit(input_data, np.array((0, 0)), single_slope)
+    result = count_trees_hit(data, np.array((0, 0)), single_slope)
     print(f"With slope {(3, 1)} you hit {result} trees.")
 
     result_list = [result]
@@ -31,7 +32,7 @@ def advent3() -> None:
         np.array((1, 2))
     ]
     for single_slope in slopes:
-        result = count_trees_hit(input_data, np.array((0, 0)), single_slope)
+        result = count_trees_hit(data, np.array((0, 0)), single_slope)
         result_list.append(result)
     result_multi = prod(result_list)
     print(f"\nWith multiple additional slopes, result is {result_multi} trees.")
@@ -39,4 +40,6 @@ def advent3() -> None:
 
 
 if __name__ == "__main__":
+    start = time_ns()
     advent3()
+    print(f"Execution time: {round((time_ns() - start) // 1000)} microseconds.")

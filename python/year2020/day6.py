@@ -1,4 +1,4 @@
-from infra import DataReader
+from time import time_ns
 
 
 class QuestionnaireHelper:
@@ -23,8 +23,20 @@ class QuestionnaireHelper:
 
 
 def advent6() -> None:
-    input_data = DataReader.read_txt_in_batch("inputs/2020/day6.txt")
-    helper = QuestionnaireHelper(input_data)
+    with open("inputs/2020/day6.txt", "r") as file:
+        lines = file.readlines()
+
+    data: list[list[str]] = []
+    batch: list[str] = []
+    for line in lines:
+        if not line.strip():
+            data.append(batch)
+            batch = []
+            continue
+        batch += line.strip().split()
+        if lines[-1] == line:
+            data.append(batch)
+    helper = QuestionnaireHelper(data)
 
     unique_sum = helper.count_group_answers("unique")
     print(f"Task 1: Sum of unique group answers: {unique_sum}")
@@ -34,4 +46,6 @@ def advent6() -> None:
 
 
 if __name__ == "__main__":
+    start = time_ns()
     advent6()
+    print(f"Execution time: {round((time_ns() - start) // 1000000)} milliseconds.")

@@ -1,6 +1,5 @@
-from typing import Any, Optional
-
-from infra import DataReader
+from typing import Any
+from time import time_ns
 
 
 class BoardingPass:
@@ -55,7 +54,7 @@ class BoardingHelper:
         return sorted(self.boarding_passes, key=lambda b_pass: b_pass.seat_id,
                       reverse=True)[0].seat_id
 
-    def find_my_seat(self) -> Optional[int]:
+    def find_my_seat(self) -> int | None:
         for row in range(128):
             for column in range(8):
                 temp_pass = BoardingPass(row, column)
@@ -72,8 +71,9 @@ class BoardingHelper:
 
 
 def advent5() -> None:
-    input_data = DataReader.read_txt("inputs/2020/day5.txt", str)
-    helper = BoardingHelper.from_text(input_data)
+    with open("inputs/2020/day5.txt", "r") as file:
+        data = file.readlines()
+    helper = BoardingHelper.from_text(data)
 
     hid = helper.get_highest_seat_id()
     print(f"Task 1: Highest seat id: {hid}")
@@ -83,4 +83,6 @@ def advent5() -> None:
 
 
 if __name__ == "__main__":
+    start = time_ns()
     advent5()
+    print(f"Execution time: {round((time_ns() - start) // 1000000)} milliseconds.")

@@ -27,18 +27,16 @@ def word2int(word: str) -> int:
     return int(word)
 
 
-if __name__ == "__main__":
-    start = time_ns()
-
+def day1() -> None:
     with open("inputs/2023/day1.txt", "r") as file:
         lines = file.readlines()
 
     task1: list[int] = []
     task2: list[int] = []
-    WORD_PATTERN = "|".join(word_num.keys())
+    word_pattern = "|".join(word_num.keys())
     for line in lines:
         found_digits = findall('[1-9]', line.strip())
-        found_words = findall(WORD_PATTERN, line.strip(), overlapped=True)
+        found_words = findall(word_pattern, line.strip(), overlapped=True)
 
         first = min(found_digits + found_words, key=line.index)
         last = max(found_digits + found_words, key=line.rfind)
@@ -51,4 +49,8 @@ if __name__ == "__main__":
     # part 2
     print(sum(task2))
 
+
+if __name__ == "__main__":
+    start = time_ns()
+    day1()
     print(f"Execution time: {round((time_ns() - start) // 1000000)} milliseconds.")

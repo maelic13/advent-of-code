@@ -1,9 +1,8 @@
-from abc import ABCMeta, abstractmethod
+from abc import ABC, abstractmethod
+from time import time_ns
 
-from infra import DataReader
 
-
-class PasswordValidator(metaclass=ABCMeta):
+class PasswordValidator(ABC):
     @staticmethod
     @abstractmethod
     def check_password(par1: int, par2: int, symbol: str, password: str) -> bool:
@@ -49,7 +48,9 @@ class PositionalPasswordValidator(PasswordValidator):
 
 
 def advent2() -> None:
-    data = DataReader.read_txt("inputs/2020/day2.txt", str)
+    with open("inputs/2020/day2.txt", "r") as file:
+        data = file.readlines()
+
     solution = SumPasswordValidator().count_valid_passwords(data)
     print(F"Number of valid passwords method sum: {solution}")
 
@@ -58,4 +59,6 @@ def advent2() -> None:
 
 
 if __name__ == "__main__":
+    start = time_ns()
     advent2()
+    print(f"Execution time: {round((time_ns() - start) // 1000)} microseconds.")

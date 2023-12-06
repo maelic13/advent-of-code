@@ -1,11 +1,11 @@
-from infra import DataReader
+from time import time_ns
 
 
 def calculate_position(course: list[str], initial_position: tuple[int, int] = (0, 0)
                        ) -> tuple[int, int]:
     distance, depth = initial_position
     for instruction in course:
-        command, value = instruction.split(" ")
+        command, value = instruction.split()
         if command == "forward":
             distance += int(value)
         elif command == "down":
@@ -32,7 +32,9 @@ def calculate_position_with_aim(course: list[str],
 
 
 def advent2() -> None:
-    data = DataReader.read_txt("inputs/2021/day2.txt", str)
+    with open("inputs/2021/day2.txt", "r") as file:
+        data = file.readlines()
+
     hor, dep = calculate_position(data)
     print(f"Multiplied horizontal and vertical positions: {hor * dep}.")
 
@@ -41,4 +43,6 @@ def advent2() -> None:
 
 
 if __name__ == "__main__":
+    start = time_ns()
     advent2()
+    print(f"Execution time: {round((time_ns() - start) // 1000)} microseconds.")

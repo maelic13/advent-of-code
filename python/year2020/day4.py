@@ -1,6 +1,5 @@
 from copy import copy
-
-from infra import DataReader
+from time import time_ns
 
 
 def count_valid_passports(database: list[list[str]], required: list[str],
@@ -58,7 +57,20 @@ def validate_field(field: str) -> bool:
 
 
 def advent4() -> None:
-    input_data = DataReader.read_txt_in_batch("inputs/2020/day4.txt")
+    with open("inputs/2020/day4.txt", "r") as file:
+        data = file.readlines()
+
+    input_data: list[list[str]] = []
+    batch: list[str] = []
+    for line in data:
+        if not line.strip():
+            input_data.append(batch)
+            batch = []
+            continue
+        batch += line.strip().split()
+        if data[-1] == line:
+            input_data.append(batch)
+
     required_fields = ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"]
     valid_passports = count_valid_passports(input_data, required_fields)
     print(f"Number of valid passports counting in those without cid: {valid_passports}.")
@@ -68,4 +80,6 @@ def advent4() -> None:
 
 
 if __name__ == "__main__":
+    start = time_ns()
     advent4()
+    print(f"Execution time: {round((time_ns() - start) // 1000000)} milliseconds.")
