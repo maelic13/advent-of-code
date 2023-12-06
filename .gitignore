@@ -3,6 +3,8 @@
 .mypy_cache/
 .vs/
 .vscode/
+c++/build/
+c++/out/
 cmake-build*
 target/
 venv/
