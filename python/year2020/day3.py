@@ -1,4 +1,4 @@
-from math import gcd
+from math import gcd, prod
 import numpy as np
 
 from infra import DataReader
@@ -33,7 +33,7 @@ def advent3() -> None:
     for single_slope in slopes:
         result = count_trees_hit(input_data, np.array((0, 0)), single_slope)
         result_list.append(result)
-    result_multi = np.prod(result_list)
+    result_multi = prod(result_list)
     print(f"\nWith multiple additional slopes, result is {result_multi} trees.")
     print(f"Step results are: {result_list}")
 

@@ -1,7 +1,6 @@
-from time import time_ns
+from math import prod
 from re import finditer, Match
-
-import numpy as np
+from time import time_ns
 
 
 class Gear:
@@ -16,7 +15,7 @@ class Gear:
         return len(self.part_numbers)
 
     def gear_ratio(self) -> int:
-        return np.prod(self.part_numbers)
+        return prod(self.part_numbers)
 
 
 class EngineSchematic:

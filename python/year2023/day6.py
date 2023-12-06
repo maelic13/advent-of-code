@@ -1,6 +1,5 @@
+from math import prod
 from time import time
-
-import numpy as np
 
 
 class Race:
@@ -46,13 +45,8 @@ def day6() -> None:
     # part 1
     times = [int(t) for t in lines[0].strip().split()[1:]]
     records = [int(r) for r in lines[1].strip().split()[1:]]
-
     races = [Race(race_time, record) for race_time, record in zip(times, records)]
-    possible_wins: list[int] = []
-    for race in races:
-        possible_wins.append(race.count_winning_charge_times())
-
-    print(np.prod(possible_wins))
+    print(prod(race.count_winning_charge_times() for race in races))
 
     # part 2
     race = Race(int("".join(lines[0].strip().split()[1:])),
