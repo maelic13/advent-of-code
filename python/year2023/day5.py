@@ -1,6 +1,6 @@
 from functools import partial
 from multiprocessing import Pool
-from time import time_ns
+from time import time
 
 
 class Map:
@@ -75,6 +75,6 @@ def day5() -> None:
 
 
 if __name__ == "__main__":
-    start = time_ns()
+    start = time()
     day5()
-    print(f"Execution time: {round((time_ns() - start) // 1000000)} milliseconds.")
+    print(f"Execution time: {round((time() - start))} seconds.")

@@ -35,10 +35,10 @@ if __name__ == "__main__":
 
     task1: list[int] = []
     task2: list[int] = []
-    word_pattern = "|".join(word_num.keys())
+    WORD_PATTERN = "|".join(word_num.keys())
     for line in lines:
         found_digits = findall('[1-9]', line.strip())
-        found_words = findall(word_pattern, line.strip(), overlapped=True)
+        found_words = findall(WORD_PATTERN, line.strip(), overlapped=True)
 
         first = min(found_digits + found_words, key=line.index)
         last = max(found_digits + found_words, key=line.rfind)

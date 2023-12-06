@@ -8,13 +8,13 @@ if __name__ == "__main__":
         lines = file.readlines()
 
     sums: list[int] = []
-    buff = 0
+    BUFF = 0
     for line in lines:
         if line == "\n":
-            sums.append(buff)
-            buff = 0
+            sums.append(BUFF)
+            BUFF = 0
             continue
-        buff += int(line.strip())
+        BUFF += int(line.strip())
 
     # part 1
     print(max(sums))

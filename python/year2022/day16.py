@@ -72,35 +72,35 @@ class ValveSystem:
     # pylint: disable=too-many-arguments
     @classmethod
     def search(cls, valve: Valve, valves: list[Valve], valve_distances: np.matrix, score,
-               time: int) -> int:
-        if time <= 0:
+               remaining_time: int) -> int:
+        if remaining_time <= 0:
             return score
 
         if valve.flow_rate > 0:
             valve.open()
-            time -= 1
-            score += time * valve.flow_rate
+            remaining_time -= 1
+            score += remaining_time * valve.flow_rate
 
         best_score = score
         for target_valve in [v for v in valves if not v.is_open]:
             temp_score = cls.search(
                 target_valve, valves, valve_distances, score,
-                time - valve_distances[valve.index, target_valve.index])
+                remaining_time - valve_distances[valve.index, target_valve.index])
             if temp_score > best_score:
                 best_score = temp_score
         valve.close()
         return best_score
 
     def multiple_path_score(self, valve: Valve, valves: list[list[Valve]],
-                            valve_distances: np.matrix, time: int) -> int:
+                            valve_distances: np.matrix, remaining_time: int) -> int:
         score = 0
         for path in valves:
-            score += self.search(valve, path, valve_distances, 0, time)
+            score += self.search(valve, path, valve_distances, 0, remaining_time)
         return score
 
-    def optimal_path_score(self, time: int, players: int = 1) -> int:
+    def optimal_path_score(self, remaining_time: int, players: int = 1) -> int:
         useful_valves = [v for v in self.valves if v.flow_rate > 0]
-        inputs = ((self.find_by_name("AA"), valves, self.valve_distances, time)
+        inputs = ((self.find_by_name("AA"), valves, self.valve_distances, remaining_time)
                   for valves in set_partitions(useful_valves, k=players))
         with Pool() as pool:
             results = pool.starmap(self.multiple_path_score, inputs)

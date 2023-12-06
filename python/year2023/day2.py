@@ -25,8 +25,8 @@ class Set:
 
 
 class Game:
-    def __init__(self, id: int, sets_played: list[Set]) -> None:
-        self.id = id
+    def __init__(self, game_id: int, sets_played: list[Set]) -> None:
+        self.id = game_id
         self.sets = sets_played
 
     @staticmethod
