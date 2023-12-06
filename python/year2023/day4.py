@@ -32,8 +32,8 @@ def day4() -> None:
 
     cards: list[Card] = []
     for line in lines:
-        card, numbers = line.strip().split(": ")
-        card_id = int(card.split()[1])
+        card_name, numbers = line.strip().split(": ")
+        card_id = int(card_name.split()[1])
 
         winning_numbers, my_numbers = numbers.split(" | ")
         cards.append(Card(card_id, list(map(int, winning_numbers.split())),

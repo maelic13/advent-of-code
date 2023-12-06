@@ -19,15 +19,15 @@ class Race:
         return self.distance(time_charging) > self.record_distance
 
     def count_winning_charge_times(self) -> int:
-        lower_time: int | None = None
-        upper_time: int | None = None
+        lower_time: int = 0
+        upper_time: int = 0
 
         for time_charging in range(1, self.race_time):
             if self.beats_record(time_charging):
                 lower_time = time_charging
                 break
 
-        if not lower_time:
+        if lower_time == 0:
             return 0
 
         for time_charging in range(self.race_time, 1, -1):
