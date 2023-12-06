@@ -35,14 +35,6 @@ def seed_to_location(maps: list[Map], seed: int) -> int:
     return current_value
 
 
-def range_seed_to_min_location(maps: list[Map], range_seed: range) -> int:
-    min_location = float("inf")
-    for seed in range_seed:
-        if (location := seed_to_location(maps, seed)) < min_location:
-            min_location = location
-    return min_location
-
-
 def day5() -> None:
     with open("inputs/2023/day5.txt", "r") as file:
         lines = file.readlines()
@@ -70,12 +62,13 @@ def day5() -> None:
     print(min(locations))
 
     # part 2
-    range_seeds: list[range] = []
+    range_seeds: list[int] = []
     for i in range(0, len(seeds), 2):
-        range_seeds.append(range(seeds[i], seeds[i] + seeds[i + 1]))
+        for j in range(seeds[i], seeds[i] + seeds[i + 1]):
+            range_seeds.append(j)
 
     with Pool() as pool:
-        locations = pool.map(partial(range_seed_to_min_location, list(maps.values())), range_seeds)
+        locations = pool.map(partial(seed_to_location, list(maps.values())), range_seeds)
         pool.close()
         pool.join()
     print(min(locations))
