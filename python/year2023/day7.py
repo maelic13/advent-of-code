@@ -1,4 +1,4 @@
-from itertools import combinations
+from itertools import product
 from time import time
 from typing import Any
 
@@ -10,6 +10,9 @@ class Hand:
     def __init__(self, cards: str, bid: str) -> None:
         self.bid = bid
         self.cards = cards
+
+    def __repr__(self) -> str:
+        return f"Hand({self.cards}, {self.bid})"
 
     def __lt__(self, other: Any):
         if not isinstance(other, Hand):
@@ -25,6 +28,9 @@ class Hand:
         raise RuntimeError(f"Could not compare cards: {self.cards} and {other.cards}.")
 
     def value(self, cards: str) -> int:
+        if not cards:
+            return 0
+
         count_cards: dict[str, int] = {}
         for card in cards:
             if card not in count_cards:
@@ -34,25 +40,25 @@ class Hand:
 
         # five of a kind
         if len(count_cards) == 1:
-            return 6
+            return 7
         # four of a kind
         if len(count_cards) == 2 and max(count_cards.values()) == 4:
-            return 5
+            return 6
         # full house
         if len(count_cards) == 2 and max(count_cards.values()) == 3:
-            return 4
+            return 5
         # three of a kind
         if len(count_cards) == 3 and max(count_cards.values()) == 3:
-            return 3
+            return 4
         # two pairs
         if len(count_cards) == 3 and max(count_cards.values()) == 2:
-            return 2
+            return 3
         # one pair
         if len(count_cards) == 4:
-            return 1
+            return 2
         # high card
         if len(count_cards) == 5:
-            return 0
+            return 1
 
         raise RuntimeError(f"Could not calculate value of a hand: {cards}")
 
@@ -62,7 +68,7 @@ class JokerHand(Hand):
                    "5": 5, "4": 4, "3": 3, "2": 2}
 
     def value(self, cards: str) -> int:
-        best_hand = cards
+        best_hand = ""
         no_joker_hand = cards.replace("J", "")
 
         if cards == no_joker_hand:
@@ -70,8 +76,8 @@ class JokerHand(Hand):
 
         available_cards = [key for key in self.card_values.keys() if key != "J"]
 
-        for added_cards in combinations(available_cards, 5 - len(no_joker_hand)):
-            hand = no_joker_hand.join(added_cards)
+        for added_cards in product(available_cards, repeat=5 - len(no_joker_hand)):
+            hand = no_joker_hand + "".join(added_cards)
             if super().value(hand) > super().value(best_hand):
                 best_hand = hand
         
@@ -88,9 +94,9 @@ def day7() -> None:
     print(sum(i * int(hand.bid) for i, hand in enumerate(hands, start=1)))
 
     # part 2
-    # joker_hands = [JokerHand(hand.cards, hand.bid) for hand in hands]
-    # joker_hands.sort()
-    # print(sum(i * int(hand.bid) for i, hand in enumerate(joker_hands, start=1)))
+    joker_hands = [JokerHand(hand.cards, hand.bid) for hand in hands]
+    joker_hands.sort()
+    print(sum(i * int(hand.bid) for i, hand in enumerate(joker_hands, start=1)))
 
 
 if __name__ == "__main__":
