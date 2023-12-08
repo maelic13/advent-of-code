@@ -1,5 +1,5 @@
-from time import time
 from re import findall
+from time import time
 
 
 class Node:
@@ -18,6 +18,12 @@ class Node:
             return self.right
         raise RuntimeError(f"Incorrect instruction: {instruction}")
 
+    def is_ghost_end(self) -> bool:
+        return self.name[-1] == "Z"
+
+    def is_ghost_start(self) -> bool:
+        return self.name[-1] == "A"
+
 
 class Network:
     def __init__(self, network: dict[str, Node] | None = None) -> None:
@@ -29,13 +35,29 @@ class Network:
     def get_node(self, name: str) -> Node:
         return self._network[name]
 
-    def follow_instructions(self, current_node: str, end_node: str, instructions: str) -> list[str]:
+    def follow_instructions(self, instructions: str) -> int:
+        current_node = "AAA"
         instruction_position = 0
-        visited_nodes: list[str] = []
+        visited_nodes: int = 0
 
-        while current_node != end_node:
+        while current_node != "ZZZ":
             current_node = self._network[current_node].get_next(instructions[instruction_position])
-            visited_nodes.append(current_node)
+            visited_nodes += 1
+
+            instruction_position += 1
+            if instruction_position >= len(instructions):
+                instruction_position = 0
+
+        return visited_nodes
+
+    def follow_ghost_instructions(self, instructions: str) -> int:
+        current_nodes = [node.name for node in self._network.values() if node.is_ghost_start()]
+        instruction_position = 0
+        visited_nodes: int = 0
+
+        while not all(self._network[node].is_ghost_end() for node in current_nodes):
+            current_nodes = [self._network[node].get_next(instructions[instruction_position]) for node in current_nodes]
+            visited_nodes += 1
 
             instruction_position += 1
             if instruction_position >= len(instructions):
@@ -54,7 +76,10 @@ def day8() -> None:
         network.add_node(Node(*findall("[A-Z]+", line)))
 
     # part 1
-    print(len(network.follow_instructions("AAA", "ZZZ", instructions)))
+    print(network.follow_instructions(instructions))
+
+    # part 2
+    print(network.follow_ghost_instructions(instructions))
 
 
 if __name__ == "__main__":
