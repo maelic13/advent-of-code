@@ -27,6 +27,7 @@ class Hand:
 
         raise RuntimeError(f"Could not compare cards: {self.cards} and {other.cards}.")
 
+    # pylint: disable=too-many-return-statements
     def value(self, cards: str) -> int:
         if not cards:
             return 0
@@ -74,13 +75,13 @@ class JokerHand(Hand):
         if cards == no_joker_hand:
             return super().value(cards)
 
-        available_cards = [key for key in self.card_values.keys() if key != "J"]
+        available_cards = [key for key in self.card_values if key != "J"]
 
         for added_cards in product(available_cards, repeat=5 - len(no_joker_hand)):
             hand = no_joker_hand + "".join(added_cards)
             if super().value(hand) > super().value(best_hand):
                 best_hand = hand
-        
+
         return super().value(best_hand)
 
 

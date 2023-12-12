@@ -26,7 +26,7 @@ class FieldMap:
         tiles_count = 0
 
         for i, row in enumerate(self._field):
-            for j, sign in enumerate(row):
+            for j in range(len(row)):
                 if self._is_in_loop(i, j, loop_nodes):
                     tiles_count += 1
 
