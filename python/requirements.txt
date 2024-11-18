@@ -1,3 +1,4 @@
+advent-of-code-data
 flake8
 more-itertools
 mypy
