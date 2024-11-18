@@ -12,3 +12,4 @@ venv/
 # files
 *.pyc
 *.txt
+Cargo.lock
