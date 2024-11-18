@@ -6,6 +6,7 @@ from aocd import get_data
 
 # This script will download all required inputs for AoC using your personal token.
 # Consult https://github.com/wimglenn/advent-of-code-data for more information.
+# Edit def _limiter(self): to remove download delay
 if __name__ == "__main__":
     with open("token.txt", "r") as token_file:
         token = token_file.read().strip()
