@@ -52,7 +52,7 @@ class SpringRow:
 
 
 def day12() -> None:
-    with open("inputs/2023/day12_ex.txt", "r") as file:
+    with open("inputs/2023/day12.txt", "r") as file:
         lines = [line.strip() for line in file.readlines()]
 
     # part 1
