@@ -20,7 +20,7 @@ fn is_report_safe(report: &Vec<isize>, mut dampened: bool) -> bool {
         if dampened { return false; }
         dampened = true
     }
-    
+
     return true;
 }
 
