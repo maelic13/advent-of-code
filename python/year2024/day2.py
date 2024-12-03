@@ -9,7 +9,7 @@ def is_report_safe(rep: list[int], dampened: bool = True) -> bool:
         rep = list(reversed(rep))
 
     for i in range(len(rep) - 1):
-        if rep[i] > rep[i + 1] or not 1 <= (rep[i + 1] - rep[i]) <= 3:
+        if not 1 <= (rep[i + 1] - rep[i]) <= 3:
             if dampened:
                 return False
             dampened = True
