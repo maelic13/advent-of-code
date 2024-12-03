@@ -11,5 +11,9 @@ path = "year2022/day1.rs"
 name = "22_d2"
 path = "year2022/day2.rs"
 
+[[bin]]
+name = "24_d1"
+path = "year2024/day1.rs"
+
 [dependencies]
 simple-stopwatch = "0.1.4"
