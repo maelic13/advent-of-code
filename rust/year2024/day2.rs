@@ -4,24 +4,24 @@ use std::io::{BufRead, BufReader};
 use simple_stopwatch::Stopwatch;
 
 fn is_report_safe(report: &Vec<isize>, mut dampened: bool) -> bool {
-    if report.len() < 2 {return true}
+    if report.len() < 2 { return true; }
 
     let mut report_to_check = report.clone();
     if report_to_check[1] < report_to_check[0] {
         report_to_check.reverse();
     }
-    
+
     for i in 1..report_to_check.len() {
         let distance: isize = report_to_check[i] - report_to_check[i - 1];
         if 1 <= distance && distance <= 3 {
-            continue
+            continue;
         }
-        
-        if dampened {return false}
+
+        if dampened { return false; }
         dampened = true
     }
     
-    return true
+    return true;
 }
 
 fn main() {
