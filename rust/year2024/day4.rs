@@ -118,5 +118,5 @@ fn main() {
     );
     println!();
     println!("Part 1 execution time: {:.0} milliseconds.", part1_time / 1_000.);
-    println!("Part 2 execution time: {:.0} microseconds.", part2_time);
+    println!("Part 2 execution time: {:.0} milliseconds.", part2_time / 1_000.);
 }
