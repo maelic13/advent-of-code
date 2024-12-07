@@ -11,50 +11,38 @@ fn count_valid(
 
     for (result, numbers) in equations {
         let (valid, result) = is_valid(
-            result, numbers, vec![], &available_operands
+            numbers[0], result, &numbers[1..].to_vec(), &available_operands
         );
-        if valid {
-            count += result;
-        }
+        if valid { count += result; }
     }
     count
 }
 
 fn is_valid(
-    expected_result: &usize, 
-    numbers: &Vec<usize>, 
-    mut operands: Vec<fn(usize, usize) -> usize>,
+    current_result: usize,
+    expected_result: &usize,
+    numbers: &Vec<usize>,
     available_operands: &Vec<fn(usize, usize) -> usize>,
 ) -> (bool, usize) {
-    let mut result: usize = numbers[0];
-    for (number, operand) in numbers[1..].iter().zip(operands.iter()) {
-        result = operand(result, *number);
-        if result > *expected_result { return (false, 0); }
+    if numbers.is_empty() || current_result > *expected_result {
+        return (current_result == *expected_result, current_result);
     }
 
-    if numbers.len() - 1 == operands.len() {
-        return (result == *expected_result, result);
-    }
-
-    for available_operand in available_operands {
-        operands.push(*available_operand);
+    for operand in available_operands {
         let (valid, result) = is_valid(
-            expected_result, numbers, operands.clone(), available_operands
+            operand(current_result, numbers[0]),
+            expected_result,
+            &numbers[1..].to_vec(),
+            available_operands
         );
         if valid { return (true, result); }
-        operands.pop();
     }
-
     (false, 0)
 }
 
-fn add(item1: usize, item2: usize) -> usize {
-    item1 + item2
-}
+fn add(item1: usize, item2: usize) -> usize { item1 + item2 }
 
-fn mul(item1: usize, item2: usize) -> usize {
-    item1 * item2
-}
+fn mul(item1: usize, item2: usize) -> usize { item1 * item2 }
 
 fn con(item1: usize, item2: usize) -> usize {
     (item1.to_string() + item2.to_string().as_str()).parse::<usize>().unwrap()
