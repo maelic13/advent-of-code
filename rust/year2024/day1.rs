@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 
@@ -9,8 +10,8 @@ fn main() {
     // read and parse file
     let file = File::open("../inputs/2024/day1.txt").unwrap();
     let reader = BufReader::new(file);
-    let mut firsts: Vec<isize> = vec![];
-    let mut seconds: Vec<isize> = vec![];
+    let mut firsts: Vec<usize> = vec![];
+    let mut seconds: Vec<usize> = vec![];
 
     for line in reader.lines() {
         let line = line.unwrap();
@@ -18,8 +19,8 @@ fn main() {
             continue;
         }
         let mut parts = line.split_whitespace();
-        firsts.push(parts.next().unwrap().parse::<isize>().unwrap());
-        seconds.push(parts.next().unwrap().parse::<isize>().unwrap());
+        firsts.push(parts.next().unwrap().parse::<usize>().unwrap());
+        seconds.push(parts.next().unwrap().parse::<usize>().unwrap());
     }
     let file_read_time = watch.us();
 
@@ -28,18 +29,22 @@ fn main() {
     seconds.sort();
     let mut result: usize = 0;
     for (first, second) in firsts.iter().zip(seconds.iter()) {
-        result += (first - second).abs() as usize;
+        result += first.abs_diff(*second);
     }
 
     println!("{}", result);
     let part1_time = watch.us() - file_read_time;
 
     // part 2
-    let mut result: usize = 0;
-    for first in firsts.iter() {
-        result += *first as usize * seconds.iter().filter(|&&x| x == *first).count();
+    let mut hash_map: HashMap<usize, usize> = HashMap::new();
+    for second in seconds {
+        hash_map.insert(second, match hash_map.get(&second) {
+            Some(i) => i + 1,
+            None => 1,
+        });
     }
-
+    
+    result = firsts.iter().map(|&i| i * hash_map.get(&i).unwrap_or_else(|| &0)).sum();
     println!("{}", result);
     let part2_time = watch.us() - part1_time - file_read_time;
 
