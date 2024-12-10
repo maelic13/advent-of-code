@@ -3,25 +3,19 @@ use std::io::{BufRead, BufReader};
 
 use simple_stopwatch::Stopwatch;
 
-fn is_report_safe(report: &Vec<isize>, mut dampened: bool) -> bool {
-    if report.len() < 2 { return true; }
+fn is_safe(report: &Vec<isize>) -> bool {
+    let ascending = report.windows(2).all(|w| w[1] - w[0] >= 1 && w[1] - w[0] <= 3);
+    let descending = report.windows(2).all(|w| w[0] - w[1] >= 1 && w[0] - w[1] <= 3);
 
-    let mut report_to_check = report.clone();
-    if report_to_check[1] < report_to_check[0] {
-        report_to_check.reverse();
-    }
+    ascending || descending
+}
 
-    for i in 1..report_to_check.len() {
-        let distance: isize = report_to_check[i] - report_to_check[i - 1];
-        if 1 <= distance && distance <= 3 {
-            continue;
-        }
-
-        if dampened { return false; }
-        dampened = true
-    }
-
-    return true;
+fn is_safe_benevolent(report: &Vec<isize>) -> bool {
+    (0..report.len()).any(|i| {
+        let mut reduced = report.clone();
+        reduced.remove(i);
+        is_safe(&reduced)
+    })
 }
 
 fn main() {
@@ -46,25 +40,11 @@ fn main() {
     let file_read_time = watch.us();
 
     // part 1
-    let mut result: isize = 0;
-    for report in &reports {
-        if is_report_safe(report, true) {
-            result += 1;
-        }
-    }
-
-    println!("{}", result);
+    println!("{}", reports.iter().filter(|report| is_safe(&report)).count());
     let part1_time = watch.us() - file_read_time;
 
     // part 2
-    let mut result: isize = 0;
-    for report in &reports {
-        if is_report_safe(report, false) {
-            result += 1;
-        }
-    }
-
-    println!("{}", result);
+    println!("{}", reports.iter().filter(|report| is_safe_benevolent(&report)).count());
     let part2_time = watch.us() - part1_time - file_read_time;
 
     // report times
