@@ -39,6 +39,11 @@ path = "year2024/day6.rs"
 name = "24_d7"
 path = "year2024/day7.rs"
 
+[[bin]]
+name = "24_d8"
+path = "year2024/day8.rs"
+
 [dependencies]
+itertools = "0.13.0"
 regex = "1.11.1"
 simple-stopwatch = "0.1.4"
