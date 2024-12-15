@@ -5,7 +5,7 @@ use std::io::{BufRead, BufReader};
 use itertools::Itertools;
 use simple_stopwatch::Stopwatch;
 
-fn count_unique_antinodes(map: &Vec<Vec<char>>, max_count: usize) -> usize {
+fn count_unique_antinodes(map: &Vec<Vec<char>>, find_all: bool) -> usize {
     let mut all_antennas: HashMap<char, Vec<(usize, usize)>> = HashMap::new();
     for i in 0..map.len() {
         for j in 0..map[0].len() {
@@ -27,7 +27,7 @@ fn count_unique_antinodes(map: &Vec<Vec<char>>, max_count: usize) -> usize {
         for antenna_pair in antennas.iter().combinations(2) {
             let nodes = find_antinodes(
                 antenna_pair[0], antenna_pair[1],
-                (map.len(), map[0].len()), max_count, max_count > 2);
+                (map.len(), map[0].len()), find_all);
             for node in nodes {
                 antinodes.insert(node);
             }
@@ -41,18 +41,18 @@ fn find_antinodes(
     antenna1: &(usize, usize),
     antenna2: &(usize, usize),
     map_size: (usize, usize),
-    max_count: usize,
-    count_antennas: bool,
+    find_all: bool,
 ) -> Vec<(usize, usize)> {
     let antenna_distance_x = antenna2.0 as isize - antenna1.0 as isize;
     let antenna_distance_y = antenna2.1 as isize - antenna1.1 as isize;
 
     let mut antinodes: Vec<(usize, usize)> = vec![];
-    if count_antennas {
+    let mut max_count: usize = 2;
+    if find_all {
         antinodes.push(antenna1.clone());
         antinodes.push(antenna2.clone());
+        max_count = map_size.0 * map_size.1;
     }
-
 
     let mut count: usize = 0;
     let mut x = antenna1.0 as isize;
@@ -89,7 +89,7 @@ fn main() {
     let watch = Stopwatch::start_new();
 
     // read and parse file
-    let file = File::open("../inputs/2024/day8.txt").unwrap();
+    let file = File::open("../inputs/2024/day8_ex.txt").unwrap();
     let reader = BufReader::new(file);
 
     let map: Vec<Vec<char>> = reader.lines().map(
@@ -98,11 +98,11 @@ fn main() {
     let file_read_time = watch.us();
 
     // part 1
-    println!("{}", count_unique_antinodes(&map, 2));
+    println!("{}", count_unique_antinodes(&map, false));
     let part1_time = watch.us() - file_read_time;
 
     // part 2
-    println!("{}", count_unique_antinodes(&map, 1000));
+    println!("{}", count_unique_antinodes(&map, true));
     let part2_time = watch.us() - part1_time - file_read_time;
 
     // report times
