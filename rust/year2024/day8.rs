@@ -89,7 +89,7 @@ fn main() {
     let watch = Stopwatch::start_new();
 
     // read and parse file
-    let file = File::open("../inputs/2024/day8_ex.txt").unwrap();
+    let file = File::open("../inputs/2024/day8.txt").unwrap();
     let reader = BufReader::new(file);
 
     let map: Vec<Vec<char>> = reader.lines().map(

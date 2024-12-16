@@ -43,6 +43,10 @@ path = "year2024/day7.rs"
 name = "24_d8"
 path = "year2024/day8.rs"
 
+[[bin]]
+name = "24_d9"
+path = "year2024/day9.rs"
+
 [dependencies]
 itertools = "0.13.0"
 regex = "1.11.1"
