@@ -1,7 +1,7 @@
+use simple_stopwatch::Stopwatch;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
-
-use simple_stopwatch::Stopwatch;
+use std::iter::zip;
 
 fn calculate_checksum(disk: &Vec<String>) -> usize {
     let mut checksum = 0;
@@ -31,82 +31,54 @@ fn move_bits_to_front(disk: &mut Vec<String>) {
 fn move_files_to_front(disk: &mut Vec<String>) {
     let disk_len: usize = disk.len();
     let disk_last_index: usize = disk_len - 1;
-    let mut last_checked_index: usize = disk_last_index;
-
-    for i in 0..disk_last_index {
-        if disk[i] != "." { continue; }
-
-        let mut empty_space_size = 0;
-        for j in 1..disk_last_index {
-            if disk[i + j] != "." {
-                empty_space_size += j;
-                break;
-            }
-        }
-
-        let mut current_file: String = String::from("0");
-        for j in 0..last_checked_index {
-            if last_checked_index - j <= i { break; }
-
-            let char: String = disk[last_checked_index - j].to_string();
-            if char == current_file || char == "." { continue; };
-            current_file = char;
-
-            let mut file_size: usize = 0;
-            for k in 1..disk_len {
-                if disk[last_checked_index - j - k] != current_file {
-                    file_size += k;
-                    break;
-                }
-            }
-            if file_size > empty_space_size { continue; }
-            for k in 0..file_size {
-                println!("Moving {} to {}", i + k, disk_len - j - file_size + k);
-                disk.swap(i + k, disk_len - j - file_size + k);
-            }
-            last_checked_index = last_checked_index - j - file_size;
-            break;
-        }
-        print_disk(&disk);
-    }
-}
-
-fn move_files_to_front2(disk: &mut Vec<String>) {
-    let disk_len: usize = disk.len();
-    let disk_last_index: usize = disk_len - 1;
-    let mut current_file: String;
+    let mut ignore_files: Vec<String> = vec![];
 
     for i in 0..disk_len {
-        let char = disk[disk_last_index - i].to_string();
-        if char == "." { continue; }
+        let file_identifier = disk[disk_last_index - i].to_string();
+        if file_identifier == "." || ignore_files.contains(&file_identifier) { continue; }
 
-        current_file = char;
-        let mut file_size: usize = 0;
-        for j in 0..disk_last_index {
-            if disk[disk_last_index - i - j] != current_file {
-                file_size += j;
+        // locate full file
+        let mut file_start_index: usize = 0;
+        let file_end_index: usize = disk_last_index - i;
+        for j in 1..(disk_len - i) {
+            if disk[file_end_index - j] == file_identifier { continue; }
+            file_start_index = file_end_index - j + 1;
+            break;
+        }
+        ignore_files.push(file_identifier);
+
+        // find large enough space if exists
+        let mut space_start_index: usize = 0;
+        let mut space_end_index: usize = 0;
+        for j in 0..file_start_index {
+            if disk[j] != "." { continue; }
+            if j >= file_start_index {
+                space_end_index = disk_len;
+                break;
+            }
+
+            space_start_index = j;
+            for k in 0..(file_end_index - file_start_index + 2) {
+                if disk[j + k] != "." { break; }
+                space_end_index = j + k;
+            }
+
+            if (space_end_index - space_start_index) >= (file_end_index - file_start_index) {
                 break;
             }
         }
 
-        for j in 0..disk_len - file_size {
-            if j > i { break; }
-            if disk[j] != "." { continue; }
-            let mut empty_space_size: usize = 0;
-            for k in 0..file_size {
-                if disk[j + k] != "." { break; }
-                empty_space_size = k + 1;
-            }
-            println!("Empty size: {}, file size: {}", empty_space_size, file_size);
-            if empty_space_size < file_size{ continue; }
-
-            for k in 0..file_size {
-                disk.swap(j + k, disk_len - i - file_size + k);
-            }
-            break;
+        if (space_end_index - space_start_index) < (file_end_index - file_start_index) {
+            continue;
         }
 
-        print_disk(&disk);
+        if space_end_index >= file_start_index { break; }
+
+        // move file
+        for (space_index, file_index) in zip(
+            space_start_index..space_end_index + 1, file_start_index..file_end_index + 1) {
+            disk.swap(file_index, space_index);
+        }
     }
 }
 
@@ -126,7 +98,7 @@ fn translate_disk_map(disk_map: &Vec<char>) -> Vec<String> {
 
 fn print_disk(disk: &Vec<String>) {
     for char in disk {
-        print!("{}", char);
+        print!("{} ", char);
     }
     println!();
 }
@@ -157,9 +129,7 @@ fn main() {
     let part1_time = watch.us() - file_read_time;
 
     // part 2
-    print_disk(&disk);
-    move_files_to_front2(&mut disk);
-    print_disk(&disk);
+    move_files_to_front(&mut disk);
     println!("{}", calculate_checksum(&disk));
     let part2_time = watch.us() - part1_time - file_read_time;
 
