@@ -48,7 +48,7 @@ fn move_files_to_front(disk: &mut Vec<String>) {
         ignore_files.push(file_identifier);
 
         // find large enough space if exists
-        let mut space_start_index: usize = 0;
+        let mut space_start_index: usize = 1;
         let mut space_end_index: usize = 0;
         for j in 0..file_start_index {
             if disk[j] != "." { continue; }
@@ -96,6 +96,7 @@ fn translate_disk_map(disk_map: &Vec<char>) -> Vec<String> {
     disk
 }
 
+#[allow(dead_code)]
 fn print_disk(disk: &Vec<String>) {
     for char in disk {
         print!("{} ", char);
@@ -107,7 +108,7 @@ fn main() {
     let watch = Stopwatch::start_new();
 
     // read and parse file
-    let file = File::open("../inputs/2024/day9_ex.txt").unwrap();
+    let file = File::open("../inputs/2024/day9.txt").unwrap();
     let reader = BufReader::new(file);
 
     let mut disk_map: Vec<char> = vec![];
@@ -135,13 +136,13 @@ fn main() {
 
     // report times
     println!();
-    println!("Total time: {:.0} microseconds.", watch.us());
+    println!("Total time: {:.2} seconds.", watch.s());
     println!("File read time: {:.0} microseconds.", file_read_time);
     println!(
-        "Execution time: {:.0} microseconds.",
-        part1_time + part2_time
+        "Execution time: {:.2} seconds.",
+        (part1_time + part2_time) / 1_000_000.
     );
     println!();
-    println!("Part 1 execution time: {:.0} microseconds.", part1_time);
-    println!("Part 2 execution time: {:.0} microseconds.", part2_time);
+    println!("Part 1 execution time: {:.0} milliseconds.", part1_time / 1_000.);
+    println!("Part 2 execution time: {:.0} milliseconds.", part2_time / 1_000.);
 }
