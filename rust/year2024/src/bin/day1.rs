@@ -1,19 +1,17 @@
 use std::collections::HashMap;
-use std::fs::File;
-use std::io::{BufRead, BufReader};
 
+use aoc_shared::{get_input, report_times};
 use simple_stopwatch::Stopwatch;
 
 fn main() {
     let watch = Stopwatch::start_new();
 
     // read and parse file
-    let file = File::open("../inputs/2024/day1.txt").unwrap();
-    let reader = BufReader::new(file);
+    let input = get_input("2024", "1", false).unwrap();
     let mut firsts: Vec<usize> = vec![];
     let mut seconds: Vec<usize> = vec![];
 
-    for line in reader.lines() {
+    for line in input {
         let line = line.unwrap();
         if line.is_empty() {
             continue;
@@ -33,7 +31,7 @@ fn main() {
     }
 
     println!("{}", result);
-    let part1_time = watch.us() - file_read_time;
+    let part1_time = watch.us();
 
     // part 2
     let mut hash_map: HashMap<usize, usize> = HashMap::new();
@@ -46,17 +44,8 @@ fn main() {
     
     result = firsts.iter().map(|&i| i * hash_map.get(&i).unwrap_or_else(|| &0)).sum();
     println!("{}", result);
-    let part2_time = watch.us() - part1_time - file_read_time;
+    let part2_time = watch.us();
 
     // report times
-    println!();
-    println!("Total time: {:.0} microseconds.", watch.us());
-    println!("File read time: {:.0} microseconds.", file_read_time);
-    println!(
-        "Execution time: {:.0} microseconds.",
-        part1_time + part2_time
-    );
-    println!();
-    println!("Part 1 execution time: {:.0} microseconds.", part1_time);
-    println!("Part 2 execution time: {:.0} microseconds.", part2_time);
+    report_times(file_read_time, part1_time, part2_time);
 }

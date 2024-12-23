@@ -1,6 +1,4 @@
-use std::fs::File;
-use std::io::{BufRead, BufReader};
-
+use aoc_shared::{get_input, report_times};
 use simple_stopwatch::Stopwatch;
 
 fn count_valid(
@@ -52,11 +50,10 @@ fn main() {
     let watch = Stopwatch::start_new();
 
     // read and parse file
-    let file = File::open("../inputs/2024/day7.txt").unwrap();
-    let reader = BufReader::new(file);
+    let input = get_input("2024", "7", false).unwrap();
     let mut equations: Vec<(usize, Vec<usize>)> = Vec::new();
 
-    for line in reader.lines() {
+    for line in input {
         let line = line.unwrap();
         if line.is_empty() { continue; }
 
@@ -68,25 +65,16 @@ fn main() {
              ).collect())
         );
     }
-    let file_read_time = watch.ms();
+    let file_read_time = watch.us();
 
     // part 1
     println!("{}", count_valid(&equations, vec![add, mul]));
-    let part1_time = watch.ms() - file_read_time;
+    let part1_time = watch.us();
 
     // part 2
     println!("{}", count_valid(&equations, vec![add, mul, con]));
-    let part2_time = watch.ms() - part1_time - file_read_time;
+    let part2_time = watch.us();
 
     // report times
-    println!();
-    println!("Total time: {:.0} milliseconds.", watch.ms());
-    println!("File read time: {:.1} milliseconds.", file_read_time);
-    println!(
-        "Execution time: {:.0} milliseconds.",
-        part1_time + part2_time
-    );
-    println!();
-    println!("Part 1 execution time: {:.0} milliseconds.", part1_time);
-    println!("Part 2 execution time: {:.0} milliseconds.", part2_time);
+    report_times(file_read_time, part1_time, part2_time);
 }

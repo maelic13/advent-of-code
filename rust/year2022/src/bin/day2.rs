@@ -1,6 +1,4 @@
-use std::fs::File;
-use std::io::{BufRead, BufReader};
-
+use aoc_shared::{get_input, report_times};
 use simple_stopwatch::Stopwatch;
 
 pub struct RPSPlayer {
@@ -125,11 +123,10 @@ fn main() {
     let watch = Stopwatch::start_new();
 
     // read and parse file
-    let file = File::open("../inputs/2022/day2.txt").unwrap();
-    let reader = BufReader::new(file);
+    let input = get_input("2022", "2", false).unwrap();
     let mut data: Vec<Vec<String>> = vec![];
 
-    for line in reader.lines() {
+    for line in input {
         let mut buff: Vec<String> = vec![];
         for char in line.unwrap().split(' ') {
             buff.push(char.to_string());
@@ -144,7 +141,7 @@ fn main() {
     for moves in &data {
         total_score += game.evaluate(&moves[1], &moves[0]);
     }
-    let part1_time = watch.us() - file_read_time;
+    let part1_time = watch.us();
     println!("{}", total_score);
 
     // part 2
@@ -152,18 +149,9 @@ fn main() {
     for moves in &data {
         total_score += game.evaluate_with_result(&moves[1], &moves[0]);
     }
-    let part2_time = watch.us() - part1_time - file_read_time;
+    let part2_time = watch.us();
     println!("{}", total_score);
 
     // report times
-    println!();
-    println!("Total time: {:.0} microseconds.", watch.us());
-    println!("File read time: {:.0} microseconds.", file_read_time);
-    println!(
-        "Execution time: {:.0} microseconds.",
-        part1_time + part2_time
-    );
-    println!();
-    println!("Part 1 execution time: {:.0} microseconds.", part1_time);
-    println!("Part 2 execution time: {:.0} microseconds.", part2_time);
+    report_times(file_read_time, part1_time, part2_time);
 }

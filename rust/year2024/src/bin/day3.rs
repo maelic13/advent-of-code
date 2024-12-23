@@ -1,6 +1,4 @@
-use std::fs::File;
-use std::io::{BufRead, BufReader};
-
+use aoc_shared::{get_input, report_times};
 use regex::Regex;
 use simple_stopwatch::Stopwatch;
 
@@ -13,7 +11,7 @@ fn advanced_section_analysis(section: &String) -> usize {
         );
     }
 
-    return result;
+    result
 }
 
 fn section_analysis(section: &String) -> usize {
@@ -24,39 +22,28 @@ fn section_analysis(section: &String) -> usize {
         result += &mul_args[1].parse::<usize>().unwrap() * &mul_args[2].parse::<usize>().unwrap();
     }
 
-    return result;
+    result
 }
 
 fn main() {
     let watch = Stopwatch::start_new();
 
     // read and parse file
-    let file = File::open("../inputs/2024/day3.txt").unwrap();
-    let reader = BufReader::new(file);
+    let input = get_input("2024", "3", false).unwrap();
 
-    let memory_sections: String =
-        reader.lines()
-            .map(|l| l.unwrap())
-            .collect::<Vec<_>>().join("");
+    let memory_sections: String = input
+        .map(|l| l.unwrap())
+        .collect::<Vec<_>>().join("");
     let file_read_time = watch.us();
 
     // part 1
     println!("{}", section_analysis(&memory_sections));
-    let part1_time = watch.us() - file_read_time;
+    let part1_time = watch.us();
 
     // part 2
     println!("{}", advanced_section_analysis(&memory_sections));
-    let part2_time = watch.us() - part1_time - file_read_time;
+    let part2_time = watch.us();
 
     // report times
-    println!();
-    println!("Total time: {:.0} microseconds.", watch.us());
-    println!("File read time: {:.0} microseconds.", file_read_time);
-    println!(
-        "Execution time: {:.0} microseconds.",
-        part1_time + part2_time
-    );
-    println!();
-    println!("Part 1 execution time: {:.0} microseconds.", part1_time);
-    println!("Part 2 execution time: {:.0} microseconds.", part2_time);
+    report_times(file_read_time, part1_time, part2_time);
 }

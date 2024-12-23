@@ -1,7 +1,7 @@
 use std::cmp::PartialEq;
-use std::fs::File;
-use std::io::{BufRead, BufReader, Error, ErrorKind};
+use std::io::{Error, ErrorKind};
 
+use aoc_shared::{get_input, report_times};
 use simple_stopwatch::Stopwatch;
 
 #[derive(Debug)]
@@ -150,11 +150,10 @@ fn main() {
     let watch = Stopwatch::start_new();
 
     // read and parse file
-    let file = File::open("../inputs/2024/day6.txt").unwrap();
-    let reader = BufReader::new(file);
+    let input = get_input("2024", "6", false).unwrap();
     let mut map: Vec<Vec<char>> = vec![];
 
-    for line in reader.lines() {
+    for line in input {
         let line = line.unwrap();
         if line.is_empty() { continue; }
 
@@ -169,7 +168,7 @@ fn main() {
     let mut library = Library { map, guard: Position::new(&guard_position), history: vec![] };
     let _ = library.move_guard();
     println!("{}", library.count_guard_route());
-    let part1_time = watch.us() - file_read_time;
+    let part1_time = watch.us();
 
     // part 2
     library.map[guard_position.x][guard_position.y] = guard_direction;
@@ -177,17 +176,8 @@ fn main() {
     library.history = vec![];
     
     println!("{}", library.count_obstacles_to_cause_loop());
-    let part2_time = watch.us() - part1_time - file_read_time;
+    let part2_time = watch.us();
 
     // report times
-    println!();
-    println!("Total time: {:.1} seconds.", watch.us() / 1_000_000.);
-    println!("File read time: {:.0} microseconds.", file_read_time);
-    println!(
-        "Execution time: {:.1} seconds.",
-        (part1_time + part2_time) / 1_000_000.
-    );
-    println!();
-    println!("Part 1 execution time: {:.0} milliseconds.", part1_time / 1_000.);
-    println!("Part 2 execution time: {:.01} seconds.", part2_time / 1_000_000.);
+    report_times(file_read_time, part1_time, part2_time);
 }

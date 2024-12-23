@@ -1,6 +1,4 @@
-use std::fs::File;
-use std::io::{BufRead, BufReader};
-
+use aoc_shared::{get_input, report_times};
 use regex::Regex;
 use simple_stopwatch::Stopwatch;
 
@@ -11,7 +9,7 @@ fn count_words_in_string(string: &String, word: &str) -> usize {
     words_counted += re.captures_iter(&string).count();
     words_counted += re.captures_iter(&string.chars().rev().collect::<String>()).count();
 
-    return words_counted;
+    words_counted
 }
 
 fn count_words(word_search: &Vec<String>, word: &str) -> usize {
@@ -61,7 +59,7 @@ fn count_words(word_search: &Vec<String>, word: &str) -> usize {
         words_counted += count_words_in_string(&diagonal, word);
     }
 
-    return words_counted;
+    words_counted
 }
 
 fn find_xmas(word_search: &Vec<String>) -> usize {
@@ -75,25 +73,24 @@ fn find_xmas(word_search: &Vec<String>) -> usize {
         }
     }
 
-    return xmas_count;
+    xmas_count
 }
 
 fn is_xmas(area: Vec<&str>) -> bool {
     let first = String::from_iter(vec![area[0].chars().nth(0).unwrap(), area[1].chars().nth(1).unwrap(), area[2].chars().nth(2).unwrap()]);
     let second = String::from_iter(vec![area[2].chars().nth(0).unwrap(), area[1].chars().nth(1).unwrap(), area[0].chars().nth(2).unwrap()]);
 
-    return (first == "MAS" || first == "SAM") && (second == "MAS" || second == "SAM");
+    (first == "MAS" || first == "SAM") && (second == "MAS" || second == "SAM")
 }
 
 fn main() {
     let watch = Stopwatch::start_new();
 
     // read and parse file
-    let file = File::open("../inputs/2024/day4.txt").unwrap();
-    let reader = BufReader::new(file);
+    let input = get_input("2024", "4", false).unwrap();
     let mut word_search: Vec<String> = vec!();
 
-    for line in reader.lines() {
+    for line in input {
         let line = line.unwrap();
         if line.is_empty() { continue; }
         word_search.push(line);
@@ -102,21 +99,12 @@ fn main() {
 
     // part 1
     println!("{}", count_words(&word_search, "XMAS"));
-    let part1_time = watch.us() - file_read_time;
+    let part1_time = watch.us();
 
     // part 2
     println!("{}", find_xmas(&word_search));
-    let part2_time = watch.us() - part1_time - file_read_time;
+    let part2_time = watch.us();
 
     // report times
-    println!();
-    println!("Total time: {:.0} milliseconds.", watch.ms());
-    println!("File read time: {:.0} microseconds.", file_read_time);
-    println!(
-        "Execution time: {:.0} milliseconds.",
-        (part1_time + part2_time) / 1_000.
-    );
-    println!();
-    println!("Part 1 execution time: {:.0} milliseconds.", part1_time / 1_000.);
-    println!("Part 2 execution time: {:.0} milliseconds.", part2_time / 1_000.);
+    report_times(file_read_time, part1_time, part2_time);
 }

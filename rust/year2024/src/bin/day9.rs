@@ -1,7 +1,7 @@
-use simple_stopwatch::Stopwatch;
-use std::fs::File;
-use std::io::{BufRead, BufReader};
 use std::iter::zip;
+
+use aoc_shared::{get_input, report_times};
+use simple_stopwatch::Stopwatch;
 
 fn calculate_checksum(disk: &Vec<String>) -> usize {
     let mut checksum = 0;
@@ -108,41 +108,30 @@ fn main() {
     let watch = Stopwatch::start_new();
 
     // read and parse file
-    let file = File::open("../inputs/2024/day9.txt").unwrap();
-    let reader = BufReader::new(file);
-
+    let input = get_input("2024", "9", false).unwrap();
     let mut disk_map: Vec<char> = vec![];
-    for line in reader.lines() {
+
+    for line in input {
         let line = line.unwrap();
         if line.is_empty() { continue; }
         for char in line.chars() {
             disk_map.push(char);
         }
     }
-    let file_read_time = watch.us();
-
     let mut disk: Vec<String> = translate_disk_map(&disk_map);
+    let file_read_time = watch.us();
 
     // part 1
     let mut modified_disk = disk.to_vec();
     move_bits_to_front(&mut modified_disk);
     println!("{}", calculate_checksum(&modified_disk));
-    let part1_time = watch.us() - file_read_time;
+    let part1_time = watch.us();
 
     // part 2
     move_files_to_front(&mut disk);
     println!("{}", calculate_checksum(&disk));
-    let part2_time = watch.us() - part1_time - file_read_time;
+    let part2_time = watch.us();
 
     // report times
-    println!();
-    println!("Total time: {:.2} seconds.", watch.s());
-    println!("File read time: {:.0} microseconds.", file_read_time);
-    println!(
-        "Execution time: {:.2} seconds.",
-        (part1_time + part2_time) / 1_000_000.
-    );
-    println!();
-    println!("Part 1 execution time: {:.0} milliseconds.", part1_time / 1_000.);
-    println!("Part 2 execution time: {:.0} milliseconds.", part2_time / 1_000.);
+    report_times(file_read_time, part1_time, part2_time);
 }

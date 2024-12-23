@@ -5,22 +5,28 @@ fn main() {
     let watch = Stopwatch::start_new();
 
     // read and parse file
-    let input = get_input("2024", "1", true).unwrap();
+    let input = get_input("2022", "1", false).unwrap();
+    let mut sums: Vec<usize> = vec![];
+    let mut buff: usize = 0;
 
     for line in input {
         let line = line.unwrap();
-        if line.is_empty() { continue; }
+        if line.is_empty() {
+            sums.push(buff);
+            buff = 0;
+            continue;
+        }
+        buff += line.parse::<usize>().unwrap();
     }
     let file_read_time = watch.us();
 
     // part 1
-    let result: isize = 0;
-    println!("{}", result);
+    println!("{}", sums.iter().max().unwrap());
     let part1_time = watch.us();
 
     // part 2
-    let result: isize = 0;
-    println!("{}", result);
+    sums.sort();
+    println!("{}", sums[sums.len() - 3..].iter().sum::<usize>());
     let part2_time = watch.us();
 
     // report times
