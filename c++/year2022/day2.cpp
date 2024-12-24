@@ -1,4 +1,3 @@
-#include <algorithm>
 #include <fstream>
 #include <chrono>
 #include <iostream>
@@ -27,12 +26,11 @@ public:
         player_move = translate_move(player_move);
         int score = get_move_score(player_move);
 
-        tuple<char, char> move(player_move, opponent_move);
-        if (find(wins.begin(), wins.end(), move) != wins.end())
+        if (const tuple<char, char> move(player_move, opponent_move); ranges::find(wins, move) != wins.end())
             score += win_score;
-        else if (find(draws.begin(), draws.end(), move) != draws.end())
+        else if (ranges::find(draws, move) != draws.end())
             score += draw_score;
-        else if (find(losses.begin(), losses.end(), move) != losses.end())
+        else if (ranges::find(losses, move) != losses.end())
             score += lose_score;
         else
             throw runtime_error("Incorrect move vector.");

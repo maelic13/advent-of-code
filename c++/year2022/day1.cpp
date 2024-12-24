@@ -10,7 +10,7 @@ using namespace std::chrono;
 
 
 int main() {
-    auto start = high_resolution_clock::now();
+    const auto start = high_resolution_clock::now();
 
     // read and parse file
     ifstream file("inputs/2022/day1.txt");
@@ -26,19 +26,23 @@ int main() {
         }
         sum += stoi(line);
     }
-    auto file_read_time = duration_cast<microseconds>(high_resolution_clock::now() - start).count();
+    const auto file_read_time = duration_cast<microseconds>(
+        high_resolution_clock::now() - start
+        ).count();
 
     // part 1
-    cout << *max_element(sums.begin(), sums.end()) << endl;
-    auto part1_time = duration_cast<microseconds>(high_resolution_clock::now() - start).count()
-            - file_read_time;
+    cout << *ranges::max_element(sums) << endl;
+    const auto part1_time = duration_cast<microseconds>(
+        high_resolution_clock::now() - start
+        ).count() - file_read_time;
 
 
     //part 2
-    sort(sums.begin(), sums.end());
+    ranges::sort(sums);
     cout << reduce(sums.end() - 3, sums.end()) << endl;
-    auto part2_time = duration_cast<microseconds>(high_resolution_clock::now() - start).count()
-            - part1_time - file_read_time;
+    const auto part2_time = duration_cast<microseconds>(
+        high_resolution_clock::now() - start
+        ).count() - part1_time - file_read_time;
 
     // report times
     cout << endl;
