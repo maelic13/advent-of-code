@@ -12,7 +12,7 @@ if __name__ == "__main__":
         token = token_file.read().strip()
     os.environ["AOC_SESSION"] = token
 
-    for year in range(2019, 2024):
+    for year in range(2019, 2025):
         for day in range(1, 26):
             file_path = Path(f"{year}/day{day}.txt")
             file_path.parent.mkdir(parents=True, exist_ok=True)
