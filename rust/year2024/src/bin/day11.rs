@@ -1,32 +1,27 @@
+use std::collections::HashMap;
+
 use aoc_shared::{get_input, report_times};
 use simple_stopwatch::Stopwatch;
 
-fn count_stones_after_blinks(stones: &Vec<String>, blinks: usize) -> usize {
-    let mut to_calculate: Vec<(String, usize)> = stones
-        .iter()
-        .map(|s| (s.clone(), 0))
-        .collect();
-    let mut count: usize = 0;
+fn count_stones_after_blinks(mut stones: HashMap<String, usize>, blinks: usize) -> usize {
+    for _ in 0..blinks {
+        let mut new_stones: HashMap<String, usize> = HashMap::new();
 
-    while !to_calculate.is_empty() {
-        let (stone, blink_num) = to_calculate.pop().unwrap();
-        if blink_num == blinks {
-            count += 1;
-            continue;
-        }
-
-        match blink(&stone) {
-            (new_stone_1, Some(new_stone_2)) => {
-                to_calculate.push((new_stone_1, blink_num + 1));
-                to_calculate.push((new_stone_2, blink_num + 1));
-            }
-            (new_stone_1, None) => {
-                to_calculate.push((new_stone_1, blink_num + 1));
+        for (stone, quantity) in &stones {
+            match blink(&stone) {
+                (new_stone_1, Some(new_stone_2)) => {
+                    *new_stones.entry(new_stone_1.to_string()).or_insert(0) += quantity;
+                    *new_stones.entry(new_stone_2.to_string()).or_insert(0) += quantity;
+                }
+                (new_stone_1, None) => {
+                    *new_stones.entry(new_stone_1.to_string()).or_insert(0) += quantity;
+                }
             }
         }
+        stones = new_stones;
     }
 
-    count
+    stones.values().sum()
 }
 
 fn blink(stone: &String) -> (String, Option<String>) {
@@ -42,8 +37,7 @@ fn blink(stone: &String) -> (String, Option<String>) {
         let mut second_half = stone[stone_len / 2..stone_len]
             .trim_start_matches('0').to_string();
         if second_half.is_empty() {
-            // optimization - insert result of rule 1
-            second_half = "1".to_string();
+            second_half = "0".to_string();
         }
         return (first_half, Some(second_half));
 
@@ -58,23 +52,23 @@ fn main() {
 
     // read and parse file
     let input = get_input("2024", "11", false).unwrap();
-    let mut stones: Vec<String> = vec![];
+    let mut stones: HashMap<String, usize> = HashMap::new();
     let file_read_time = watch.us();
 
     for line in input {
         let line = line.unwrap();
         if line.is_empty() { continue; }
         for c in line.split_whitespace() {
-            stones.push(c.to_string());
+            *stones.entry(c.to_string()).or_insert(0) += 1;
         }
     }
 
     // part 1
-    println!("{}", count_stones_after_blinks(&stones, 25));
+    println!("{}", count_stones_after_blinks(stones.clone(), 25));
     let part1_time = watch.us();
 
     // part 2
-    // println!("{}", count_stones_after_blinks(&stones, 75));
+    println!("{}", count_stones_after_blinks(stones, 75));
     let part2_time = watch.us();
 
     // report times
