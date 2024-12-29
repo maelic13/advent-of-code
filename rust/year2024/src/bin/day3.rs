@@ -7,7 +7,12 @@ fn advanced_section_analysis(section: &String) -> usize {
 
     for part in section.split("do()") {
         result += section_analysis(
-            &part.split("don't()").next().unwrap().parse::<String>().unwrap()
+            &part
+                .split("don't()")
+                .next()
+                .unwrap()
+                .parse::<String>()
+                .unwrap(),
         );
     }
 
@@ -31,9 +36,7 @@ fn main() {
     // read and parse file
     let input = get_input("2024", "3", false).unwrap();
 
-    let memory_sections: String = input
-        .map(|l| l.unwrap())
-        .collect::<Vec<_>>().join("");
+    let memory_sections: String = input.map(|l| l.unwrap()).collect::<Vec<_>>().join("");
     let file_read_time = watch.us();
 
     // part 1

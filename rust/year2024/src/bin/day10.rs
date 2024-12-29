@@ -4,12 +4,14 @@ use simple_stopwatch::Stopwatch;
 fn get_score_and_rating(map: &Vec<Vec<usize>>) -> (usize, usize) {
     let mut score: usize = 0;
     let mut rating: usize = 0;
-    
+
     for i in 0..map.len() {
         for j in 0..map[0].len() {
             let mut found_tops: Vec<(usize, usize)> = vec![];
-            if map[i][j] != 0 { continue; }
-            
+            if map[i][j] != 0 {
+                continue;
+            }
+
             let mut to_expand: Vec<(usize, usize)> = vec![(i, j)];
             while !to_expand.is_empty() {
                 let position = to_expand.pop().unwrap();
@@ -40,7 +42,7 @@ fn get_neighbors_on_slope(
     let map_x_size = map.len();
     let map_y_size = map[0].len();
     let mut valid_neighbors: Vec<(usize, usize)> = vec![];
-    
+
     if position.0 > 0 && map[position.0 - 1][position.1] == level {
         valid_neighbors.push((position.0 - 1, position.1));
     }
@@ -66,8 +68,10 @@ fn main() {
 
     for line in input {
         let line = line.unwrap();
-        if line.is_empty() { continue; }
-        
+        if line.is_empty() {
+            continue;
+        }
+
         let mut row: Vec<usize> = vec![];
         for char in line.chars() {
             row.push(char.to_digit(10).unwrap() as usize);
@@ -77,7 +81,7 @@ fn main() {
     let file_read_time = watch.us();
 
     // part 1
-    let(score, rating) = get_score_and_rating(&map);
+    let (score, rating) = get_score_and_rating(&map);
     println!("{}", score);
     let part1_time = watch.us();
 

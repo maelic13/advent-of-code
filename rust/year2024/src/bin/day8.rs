@@ -8,7 +8,9 @@ fn count_unique_antinodes(map: &Vec<Vec<char>>, find_all: bool) -> usize {
     let mut all_antennas: HashMap<char, Vec<(usize, usize)>> = HashMap::new();
     for i in 0..map.len() {
         for j in 0..map[0].len() {
-            if map[i][j] == '.' { continue; }
+            if map[i][j] == '.' {
+                continue;
+            }
 
             match all_antennas.get(&map[i][j]) {
                 None => {
@@ -25,8 +27,11 @@ fn count_unique_antinodes(map: &Vec<Vec<char>>, find_all: bool) -> usize {
     for (_, antennas) in all_antennas.iter() {
         for antenna_pair in antennas.iter().combinations(2) {
             let nodes = find_antinodes(
-                antenna_pair[0], antenna_pair[1],
-                (map.len(), map[0].len()), find_all);
+                antenna_pair[0],
+                antenna_pair[1],
+                (map.len(), map[0].len()),
+                find_all,
+            );
             for node in nodes {
                 antinodes.insert(node);
             }
@@ -57,7 +62,9 @@ fn find_antinodes(
     let mut x = antenna1.0 as isize;
     let mut y = antenna1.1 as isize;
     loop {
-        if count >= max_count { break; }
+        if count >= max_count {
+            break;
+        }
 
         x -= antenna_distance_x;
         y -= antenna_distance_y;
@@ -71,7 +78,9 @@ fn find_antinodes(
     let mut x = antenna2.0 as isize;
     let mut y = antenna2.1 as isize;
     loop {
-        if count >= max_count { break; }
+        if count >= max_count {
+            break;
+        }
 
         x += antenna_distance_x;
         y += antenna_distance_y;
@@ -90,9 +99,7 @@ fn main() {
     // read and parse file
     let input = get_input("2024", "8", false).unwrap();
 
-    let map: Vec<Vec<char>> = input.map(
-        |line| line.unwrap().chars().collect()
-    ).collect();
+    let map: Vec<Vec<char>> = input.map(|line| line.unwrap().chars().collect()).collect();
     let file_read_time = watch.us();
 
     // part 1

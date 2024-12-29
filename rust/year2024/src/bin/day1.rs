@@ -36,13 +36,19 @@ fn main() {
     // part 2
     let mut hash_map: HashMap<usize, usize> = HashMap::new();
     for second in seconds {
-        hash_map.insert(second, match hash_map.get(&second) {
-            Some(i) => i + 1,
-            None => 1,
-        });
+        hash_map.insert(
+            second,
+            match hash_map.get(&second) {
+                Some(i) => i + 1,
+                None => 1,
+            },
+        );
     }
-    
-    result = firsts.iter().map(|&i| i * hash_map.get(&i).unwrap_or_else(|| &0)).sum();
+
+    result = firsts
+        .iter()
+        .map(|&i| i * hash_map.get(&i).unwrap_or_else(|| &0))
+        .sum();
     println!("{}", result);
     let part2_time = watch.us();
 

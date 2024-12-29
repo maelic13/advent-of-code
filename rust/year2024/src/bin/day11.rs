@@ -35,12 +35,12 @@ fn blink(stone: &String) -> (String, Option<String>) {
     if stone_len % 2 == 0 {
         let first_half = stone[0..stone_len / 2].to_string();
         let mut second_half = stone[stone_len / 2..stone_len]
-            .trim_start_matches('0').to_string();
+            .trim_start_matches('0')
+            .to_string();
         if second_half.is_empty() {
             second_half = "0".to_string();
         }
         return (first_half, Some(second_half));
-
     }
 
     // rule 3
@@ -57,7 +57,9 @@ fn main() {
 
     for line in input {
         let line = line.unwrap();
-        if line.is_empty() { continue; }
+        if line.is_empty() {
+            continue;
+        }
         for c in line.split_whitespace() {
             *stones.entry(c.to_string()).or_insert(0) += 1;
         }

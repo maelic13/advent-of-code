@@ -9,9 +9,14 @@ fn count_valid(
 
     for (result, numbers) in equations {
         let (valid, result) = is_valid(
-            numbers[0], result, &numbers[1..].to_vec(), &available_operands
+            numbers[0],
+            result,
+            &numbers[1..].to_vec(),
+            &available_operands,
         );
-        if valid { count += result; }
+        if valid {
+            count += result;
+        }
     }
     count
 }
@@ -31,19 +36,27 @@ fn is_valid(
             operand(current_result, numbers[0]),
             expected_result,
             &numbers[1..].to_vec(),
-            available_operands
+            available_operands,
         );
-        if valid { return (true, result); }
+        if valid {
+            return (true, result);
+        }
     }
     (false, 0)
 }
 
-fn add(item1: usize, item2: usize) -> usize { item1 + item2 }
+fn add(item1: usize, item2: usize) -> usize {
+    item1 + item2
+}
 
-fn mul(item1: usize, item2: usize) -> usize { item1 * item2 }
+fn mul(item1: usize, item2: usize) -> usize {
+    item1 * item2
+}
 
 fn con(item1: usize, item2: usize) -> usize {
-    (item1.to_string() + item2.to_string().as_str()).parse::<usize>().unwrap()
+    (item1.to_string() + item2.to_string().as_str())
+        .parse::<usize>()
+        .unwrap()
 }
 
 fn main() {
@@ -55,15 +68,20 @@ fn main() {
 
     for line in input {
         let line = line.unwrap();
-        if line.is_empty() { continue; }
+        if line.is_empty() {
+            continue;
+        }
 
         let mut split = line.split(": ");
-        equations.push(
-            (split.next().unwrap().parse::<usize>().unwrap(),
-             split.next().unwrap().split_whitespace().map(
-                 |s| s.parse::<usize>().unwrap()
-             ).collect())
-        );
+        equations.push((
+            split.next().unwrap().parse::<usize>().unwrap(),
+            split
+                .next()
+                .unwrap()
+                .split_whitespace()
+                .map(|s| s.parse::<usize>().unwrap())
+                .collect(),
+        ));
     }
     let file_read_time = watch.us();
 

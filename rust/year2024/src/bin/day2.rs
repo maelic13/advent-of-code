@@ -2,8 +2,12 @@ use aoc_shared::{get_input, report_times};
 use simple_stopwatch::Stopwatch;
 
 fn is_safe(report: &Vec<isize>) -> bool {
-    let ascending = report.windows(2).all(|w| w[1] - w[0] >= 1 && w[1] - w[0] <= 3);
-    let descending = report.windows(2).all(|w| w[0] - w[1] >= 1 && w[0] - w[1] <= 3);
+    let ascending = report
+        .windows(2)
+        .all(|w| w[1] - w[0] >= 1 && w[1] - w[0] <= 3);
+    let descending = report
+        .windows(2)
+        .all(|w| w[0] - w[1] >= 1 && w[0] - w[1] <= 3);
 
     ascending || descending
 }
@@ -37,11 +41,20 @@ fn main() {
     let file_read_time = watch.us();
 
     // part 1
-    println!("{}", reports.iter().filter(|report| is_safe(&report)).count());
+    println!(
+        "{}",
+        reports.iter().filter(|report| is_safe(&report)).count()
+    );
     let part1_time = watch.us();
 
     // part 2
-    println!("{}", reports.iter().filter(|report| is_safe_benevolent(&report)).count());
+    println!(
+        "{}",
+        reports
+            .iter()
+            .filter(|report| is_safe_benevolent(&report))
+            .count()
+    );
     let part2_time = watch.us();
 
     // report times

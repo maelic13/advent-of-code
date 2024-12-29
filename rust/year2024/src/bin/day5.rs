@@ -34,7 +34,9 @@ fn count_in_fixed_updates(rules: &Vec<Vec<usize>>, updates: Vec<Vec<usize>>) -> 
     let mut sum = 0;
 
     for mut update in updates {
-        if is_correct(&update, rules) { continue; }
+        if is_correct(&update, rules) {
+            continue;
+        }
 
         while !is_correct(&update, rules) {
             for rule in rules {
@@ -74,16 +76,18 @@ fn main() {
         }
 
         if !rules_processed {
-            let rule = line.split("|").map(
-                |x| x.parse::<usize>().unwrap()
-            ).collect::<Vec<usize>>();
+            let rule = line
+                .split("|")
+                .map(|x| x.parse::<usize>().unwrap())
+                .collect::<Vec<usize>>();
             rules.push(rule);
             continue;
         }
 
-        let update = line.split(",").map(
-            |x| x.parse::<usize>().unwrap()
-        ).collect::<Vec<usize>>();
+        let update = line
+            .split(",")
+            .map(|x| x.parse::<usize>().unwrap())
+            .collect::<Vec<usize>>();
         updates.push(update);
     }
     let file_read_time = watch.us();
