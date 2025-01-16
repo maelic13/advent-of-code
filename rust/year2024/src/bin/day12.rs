@@ -30,63 +30,80 @@ impl Area {
     }
 
     fn number_of_sides(&self) -> usize {
-        println!("Plots: {:?}", self.plots);
-        let directions: Vec<(isize, isize)> = vec![(0, -1), (1, 0), (0, 1), (-1, 0)];
+        // To get number of sides, calculate sum of corners in area.
         let mut number_of_sides: usize = 0;
 
-        // find top-left element
-        let min_x: &usize = &self.plots.iter().map(|x| x.0).min().unwrap();
-        let min_y: &usize = &self
-            .plots
-            .iter()
-            .filter_map(|x| if x.0 == *min_x { Some(x.1) } else { None })
-            .min()
-            .unwrap();
-        let start: (usize, usize) = (*min_x, *min_y);
-        println!("Start: {:?}", start);
-
-        let mut current_position: (usize, usize) = start.clone();
-        let mut current_direction: (isize, isize) = (0, -1);
-        let mut visited: HashSet<(usize, usize)> = HashSet::from([current_position]);
-        loop {
-            println!("Current position: {:?}", current_position);
-            let mut new_position = (current_position.0 as isize, current_position.1 as isize);
-            for direction in &directions {
-                new_position = (
-                    current_position.0 as isize + direction.0,
-                    current_position.1 as isize + direction.1,
-                );
-                println!(
-                    "New position: {:?}, current direction: {:?}",
-                    new_position, current_direction
-                );
-                if new_position.0 < 0
-                    || new_position.1 < 0
-                    || visited.contains(&(new_position.0 as usize, new_position.1 as usize))
-                    || !self
-                        .plots
-                        .contains(&(new_position.0 as usize, new_position.1 as usize))
-                {
-                    continue;
-                }
-
-                if &current_direction != direction {
-                    number_of_sides += 1;
-                }
-                current_direction = *direction;
-                break;
-            }
-            if current_position == (new_position.0 as usize, new_position.1 as usize) {
-                break;
-            }
-            current_position = (new_position.0 as usize, new_position.1 as usize);
-            visited.insert((current_position.0, current_position.1));
-            if current_position == start {
-                break;
-            }
+        for plot in self.plots.iter() {
+            number_of_sides += self.convex(plot) + self.concave(plot);
         }
 
         number_of_sides
+    }
+
+    fn contains(&self, coordinates: (isize, isize)) -> bool {
+        if coordinates.0 < 0 || coordinates.1 < 0 {
+            return false;
+        }
+
+        self.plots.contains(&(coordinates.0 as usize, coordinates.1 as usize))
+    }
+
+    fn convex(&self, plot: &(usize, usize)) -> usize {
+        let mut num: usize = 0;
+
+        let up: (isize, isize) = (plot.0 as isize - 1, plot.1 as isize);
+        let down: (isize, isize) = (plot.0 as isize + 1, plot.1 as isize);
+        let left: (isize, isize) = (plot.0 as isize, plot.1 as isize - 1);
+        let right: (isize, isize) = (plot.0 as isize, plot.1 as isize + 1);
+
+        if !self.contains(up) && !self.contains(right) {
+            num += 1;
+        }
+
+        if !self.contains(right) && !self.contains(down) {
+            num += 1;
+        }
+
+        if !self.contains(down) && !self.contains(left) {
+            num += 1;
+        }
+
+        if !self.contains(left) && !self.contains(up) {
+            num += 1;
+        }
+
+        num
+    }
+
+    fn concave(&self, plot: &(usize, usize)) -> usize {
+        let mut num: usize = 0;
+
+        let up: (isize, isize) = (plot.0 as isize - 1, plot.1 as isize);
+        let down: (isize, isize) = (plot.0 as isize + 1, plot.1 as isize);
+        let left: (isize, isize) = (plot.0 as isize, plot.1 as isize - 1);
+        let right: (isize, isize) = (plot.0 as isize, plot.1 as isize + 1);
+        let up_right: (isize, isize) = (plot.0 as isize - 1, plot.1 as isize + 1);
+        let up_left: (isize, isize) = (plot.0 as isize - 1, plot.1 as isize - 1);
+        let down_right: (isize, isize) = (plot.0 as isize + 1, plot.1 as isize + 1);
+        let down_left: (isize, isize) = (plot.0 as isize + 1, plot.1 as isize - 1);
+
+        if self.contains(up) && self.contains(right) && !self.contains(up_right) {
+            num += 1;
+        }
+
+        if self.contains(right) && self.contains(down) && !self.contains(down_right) {
+            num += 1;
+        }
+
+        if self.contains(down) && self.contains(left) && !self.contains(down_left) {
+            num += 1;
+        }
+
+        if self.contains(left) && self.contains(up) && !self.contains(up_left) {
+            num += 1;
+        }
+
+        num
     }
 
     fn calculate_fence_cost(&self) -> usize {
@@ -163,7 +180,7 @@ fn main() {
     let watch = Stopwatch::start_new();
 
     // read and parse file
-    let input = get_input("2024", "12", true).unwrap();
+    let input = get_input("2024", "12", false).unwrap();
     let map = StringMap::from_lines(input);
     let file_read_time = watch.us();
 
