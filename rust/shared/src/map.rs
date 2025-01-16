@@ -2,13 +2,40 @@ use std::fmt::Display;
 use std::fs::File;
 use std::io::{BufReader, Lines};
 
+#[derive(Clone)]
 pub struct Map2D<T> {
     data: Vec<T>,
     width: usize,
     height: usize,
 }
 
-impl<T: Display> Map2D<T> {
+impl<T: Display + ParseElement> Map2D<T> {
+    pub fn from_lines(lines: Lines<BufReader<File>>) -> Self {
+        let mut data: Vec<T> = vec![];
+        let mut width: usize = 0;
+        let mut height: usize = 0;
+
+        for line in lines {
+            let line = line.expect("Failed to read line");
+            if line.is_empty() {
+                continue;
+            }
+
+            height += 1;
+            width = line.len();
+
+            for char in line.chars() {
+                data.push(T::parse_element(char));
+            }
+        }
+
+        Map2D {
+            data,
+            width,
+            height,
+        }
+    }
+
     pub fn index(&self, x: usize, y: usize) -> usize {
         y * self.width + x
     }
@@ -25,6 +52,22 @@ impl<T: Display> Map2D<T> {
             return None;
         }
         self.get(x as usize, y as usize)
+    }
+
+    pub fn set(&mut self, x: usize, y: usize, value: T) -> bool {
+        if x >= self.height || y >= self.width {
+            return false;
+        }
+        let index = self.index(x, y);
+        self.data[index] = value;
+        true
+    }
+
+    pub fn set_isize(&mut self, x: isize, y: isize, value: T) -> bool {
+        if x < 0 || y < 0 {
+            return false;
+        }
+        self.set(x as usize, y as usize, value)
     }
 
     pub fn print_map(&self) {
@@ -46,62 +89,30 @@ impl<T: Display> Map2D<T> {
     }
 }
 
-pub trait FromLines: Sized {
-    fn from_lines(lines: Lines<BufReader<File>>) -> Self;
+pub trait ParseElement {
+    fn parse_element(c: char) -> Self;
 }
 
-impl FromLines for Map2D<String> {
-    fn from_lines(lines: Lines<BufReader<File>>) -> Self {
-        let mut data: Vec<String> = vec![];
-        let mut width: usize = 0;
-        let mut height: usize = 0;
-
-        for line in lines {
-            let line = line.expect("Failed to read line");
-            if line.is_empty() {
-                continue;
-            }
-
-            height += 1;
-            width = line.len();
-
-            for char in line.chars() {
-                data.push(String::from(char));
-            }
-        }
-
-        Map2D {
-            data,
-            width,
-            height,
-        }
+impl ParseElement for char {
+    fn parse_element(c: char) -> Self {
+        c
     }
 }
 
-impl FromLines for Map2D<isize> {
-    fn from_lines(lines: Lines<BufReader<File>>) -> Self {
-        let mut data: Vec<isize> = vec![];
-        let mut width: usize = 0;
-        let mut height: usize = 0;
+impl ParseElement for usize {
+    fn parse_element(c: char) -> Self {
+        c.to_digit(10).expect("Could not parse char into digit.") as usize
+    }
+}
 
-        for line in lines {
-            let line = line.expect("Failed to read line");
-            if line.is_empty() {
-                continue;
-            }
+impl ParseElement for isize {
+    fn parse_element(c: char) -> Self {
+        c.to_digit(10).expect("Could not parse char into digit.") as isize
+    }
+}
 
-            height += 1;
-            width = line.len();
-
-            for char in line.chars() {
-                data.push(char.to_digit(10).expect("Could not parse char into digit.") as isize);
-            }
-        }
-
-        Map2D {
-            data,
-            width,
-            height,
-        }
+impl ParseElement for String {
+    fn parse_element(c: char) -> Self {
+        c.to_string()
     }
 }

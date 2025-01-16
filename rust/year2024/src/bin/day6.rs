@@ -1,60 +1,57 @@
-use std::cmp::PartialEq;
+use std::collections::HashSet;
 use std::io::{Error, ErrorKind};
+use std::iter::Cycle;
+use std::vec::IntoIter;
 
-use aoc_shared::{get_input, report_times};
 use simple_stopwatch::Stopwatch;
 
-#[derive(Debug)]
-struct Position {
-    x: usize,
-    y: usize,
-}
+use aoc_shared::map::Map2D;
+use aoc_shared::{get_input, report_times};
 
 struct Library {
-    map: Vec<Vec<char>>,
-    guard: Position,
-    history: Vec<(Position, char)>,
-}
-
-impl Position {
-    fn new(position: &Position) -> Position {
-        Position {
-            x: position.x,
-            y: position.y,
-        }
-    }
-
-    fn from_tuple(t: (isize, isize)) -> Position {
-        Position {
-            x: t.0 as usize,
-            y: t.1 as usize,
-        }
-    }
-}
-
-impl PartialEq<Position> for &Position {
-    fn eq(&self, other: &Position) -> bool {
-        &self.x == &other.x && &self.y == &other.y
-    }
+    map: Map2D<char>,
+    guard: (isize, isize),
+    direction: (isize, isize),
+    history: HashSet<((isize, isize), (isize, isize))>,
 }
 
 impl Library {
-    fn find_guard(map: &Vec<Vec<char>>) -> Result<Position, Error> {
-        for x in 0..map.len() {
-            for y in 0..map[0].len() {
-                if "<>^v".contains(map[x][y]) {
-                    return Ok(Position { x, y });
+    fn find_guard(map: &Map2D<char>) -> Result<((isize, isize), (isize, isize)), Error> {
+        for x in 0..map.width() as isize {
+            for y in 0..map.height() as isize {
+                let element = map
+                    .get_isize(x, y)
+                    .expect("Could not get location from coordinates in library.");
+                if !"<>^v".contains(*element) {
+                    continue;
                 }
+                let direction: (isize, isize) = match element {
+                    '>' => (1, 0),
+                    '<' => (-1, 0),
+                    '^' => (0, -1),
+                    'v' => (0, 1),
+                    _ => {
+                        return Err(Error::new(
+                            ErrorKind::InvalidInput,
+                            "Guard facing direction not understood.",
+                        ))
+                    }
+                };
+                return Ok(((x, y), direction));
             }
         }
         Err(Error::new(ErrorKind::NotFound, "Guard not found."))
     }
 
     fn move_guard(&mut self) -> Result<(), Error> {
+        let mut directions = self.create_direction_iterator();
+
         loop {
             match self.guard_make_step() {
                 Ok(true) => continue,
-                Ok(false) => self.rotate_guard(),
+                Ok(false) => {
+                    self.direction = directions.next().expect("Could not get next direction.")
+                }
                 Err(err) => {
                     return Err(err);
                 }
@@ -62,118 +59,73 @@ impl Library {
         }
     }
 
-    fn rotate_guard(&mut self) {
-        let right_rotation = ">v<^>";
-        let guard_direction = self.map[self.guard.x][self.guard.y];
-
-        let guard_direction_index = right_rotation.find(guard_direction).unwrap();
-        self.map[self.guard.x][self.guard.y] = right_rotation
-            .chars()
-            .nth(guard_direction_index + 1)
-            .unwrap();
+    fn create_direction_iterator(&mut self) -> Cycle<IntoIter<(isize, isize)>> {
+        let mut generator = vec![(1, 0), (0, 1), (-1, 0), (0, -1)].into_iter().cycle();
+        while generator.next().unwrap() != self.direction {
+            continue;
+        }
+        generator
     }
 
     fn guard_make_step(&mut self) -> Result<bool, Error> {
-        if self.find_in_history(&self.guard, self.map[self.guard.x][self.guard.y]) {
+        if !self.history.insert((self.guard, self.direction)) {
             return Err(Error::new(ErrorKind::Interrupted, "Guard is in a loop."));
         }
-        self.history.push((
-            Position::new(&self.guard),
-            self.map[self.guard.x][self.guard.y],
-        ));
 
-        let direction: (isize, isize) = match self.map[self.guard.x][self.guard.y] {
-            '>' => (0, 1),
-            '<' => (0, -1),
-            '^' => (-1, 0),
-            'v' => (1, 0),
-            _ => {
-                return Err(Error::new(
-                    ErrorKind::InvalidInput,
-                    "Guard facing direction not understood.",
-                ))
-            }
-        };
-
-        let new_guard_position = (
-            self.guard.x as isize + direction.0,
-            self.guard.y as isize + direction.1,
+        let (new_x, new_y) = (
+            self.guard.0 + self.direction.0,
+            self.guard.1 + self.direction.1,
         );
-        if new_guard_position.0 < 0
-            || new_guard_position.0 >= self.map.len() as isize
-            || new_guard_position.1 < 0
-            || new_guard_position.1 >= self.map[0].len() as isize
-        {
-            self.map[self.guard.x][self.guard.y] = 'X';
-            return Err(Error::new(
+
+        match self.map.get_isize(new_x, new_y) {
+            Some('#') => Ok(false),
+            Some(_) => {
+                self.guard = (new_x, new_y);
+                Ok(true)
+            }
+            None => Err(Error::new(
                 ErrorKind::InvalidInput,
                 "Guard stepped outside of map.",
-            ));
+            )),
         }
-
-        let new_guard_position = Position::from_tuple(new_guard_position);
-        if self.map[new_guard_position.x][new_guard_position.y] == '#' {
-            return Ok(false);
-        }
-
-        self.map[new_guard_position.x][new_guard_position.y] = self.map[self.guard.x][self.guard.y];
-        self.map[self.guard.x][self.guard.y] = 'X';
-        self.guard = new_guard_position;
-        Ok(true)
     }
 
-    fn count_guard_route(&mut self) -> usize {
-        let mut count: usize = 0;
-        for x in 0..self.map.len() {
-            for y in 0..self.map[0].len() {
-                if self.map[x][y] == 'X' {
-                    count += 1;
-                }
-            }
-        }
-        count
-    }
+    fn get_unique_history_positions(&self) -> HashSet<(isize, isize)> {
+        let mut unique_positions: HashSet<(isize, isize)> = HashSet::new();
 
-    fn find_in_history(&self, position: &Position, direction: char) -> bool {
-        for (h_position, h_direction) in &self.history {
-            if position == *h_position && direction == *h_direction {
-                return true;
-            }
+        for (position, _) in &self.history {
+            unique_positions.insert(*position);
         }
-        false
+
+        unique_positions
     }
 
     fn count_obstacles_to_cause_loop(&mut self) -> usize {
-        let original_map = self.map.to_vec();
-        let original_guard = Position {
-            x: self.guard.x,
-            y: self.guard.y,
-        };
+        let original_guard_position = self.guard.clone();
+        let original_guard_direction = self.direction.clone();
+
+        let new_obstacle_positions = self.get_unique_history_positions();
+        self.history.clear();
+
         let mut obstacles: usize = 0;
+        for position in new_obstacle_positions {
+            self.map.set_isize(position.0, position.1, '#');
 
-        for x in 0..self.map.len() {
-            for y in 0..self.map[0].len() {
-                if self.map[x][y] != 'X' {
-                    continue;
-                }
-
-                self.map[x][y] = '#';
-                match self.move_guard() {
-                    Ok(_) => {}
-                    Err(err) => {
-                        if err.kind() == ErrorKind::Interrupted {
-                            obstacles += 1
-                        }
+            match self.move_guard() {
+                Ok(_) => {}
+                Err(err) => {
+                    if err.kind() == ErrorKind::Interrupted {
+                        obstacles += 1
                     }
                 }
-                self.map = original_map.to_vec();
-                self.guard = Position {
-                    x: original_guard.x,
-                    y: original_guard.y,
-                };
-                self.history = vec![];
             }
+
+            self.map.set_isize(position.0, position.1, '.');
+            self.guard = original_guard_position.clone();
+            self.direction = original_guard_direction.clone();
+            self.history.clear();
         }
+
         obstacles
     }
 }
@@ -183,35 +135,26 @@ fn main() {
 
     // read and parse file
     let input = get_input("2024", "6", false).unwrap();
-    let mut map: Vec<Vec<char>> = vec![];
-
-    for line in input {
-        let line = line.unwrap();
-        if line.is_empty() {
-            continue;
-        }
-
-        map.push(line.chars().collect());
-    }
+    let map: Map2D<char> = Map2D::from_lines(input);
     let file_read_time = watch.us();
 
     // part 1
-    let guard_position = Library::find_guard(&map).unwrap();
-    let guard_direction = map[guard_position.x][guard_position.y];
+    let (guard_position, guard_direction) =
+        Library::find_guard(&map).expect("Did not find guard in library.");
 
     let mut library = Library {
         map,
-        guard: Position::new(&guard_position),
-        history: vec![],
+        guard: guard_position,
+        direction: guard_direction,
+        history: HashSet::new(),
     };
     let _ = library.move_guard();
-    println!("{}", library.count_guard_route());
+    println!("{}", library.get_unique_history_positions().len());
     let part1_time = watch.us();
 
     // part 2
-    library.map[guard_position.x][guard_position.y] = guard_direction;
+    library.direction = guard_direction;
     library.guard = guard_position;
-    library.history = vec![];
 
     println!("{}", library.count_obstacles_to_cause_loop());
     let part2_time = watch.us();

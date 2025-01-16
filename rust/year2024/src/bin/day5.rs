@@ -15,7 +15,7 @@ fn is_correct(update: &Vec<usize>, rules: &Vec<Vec<usize>>) -> bool {
         }
     }
 
-    return is_correct;
+    is_correct
 }
 
 fn count_in_correct_updates(rules: &Vec<Vec<usize>>, updates: &Vec<Vec<usize>>) -> usize {
@@ -27,7 +27,7 @@ fn count_in_correct_updates(rules: &Vec<Vec<usize>>, updates: &Vec<Vec<usize>>) 
         }
     }
 
-    return sum;
+    sum
 }
 
 fn count_in_fixed_updates(rules: &Vec<Vec<usize>>, updates: Vec<Vec<usize>>) -> usize {
@@ -56,7 +56,7 @@ fn count_in_fixed_updates(rules: &Vec<Vec<usize>>, updates: Vec<Vec<usize>>) -> 
         sum += update[(update.len() - 1) / 2];
     }
 
-    return sum;
+    sum
 }
 
 fn main() {
