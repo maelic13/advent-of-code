@@ -2,46 +2,62 @@ use std::fmt::Display;
 use std::fs::File;
 use std::io::{BufReader, Lines};
 
-pub trait ParseElement: Sized {
-    fn parse_element(token: char) -> Self;
-}
-
-impl ParseElement for i32 {
-    fn parse_element(token: char) -> Self {
-        token.to_digit(10).expect("Failed to parse i32.") as i32
-    }
-}
-
-impl ParseElement for String {
-    fn parse_element(token: char) -> Self {
-        token.to_string()
-    }
-}
-
-pub struct Map<T> {
+pub struct Map2D<T> {
     data: Vec<T>,
     width: usize,
     height: usize,
 }
 
-impl<T> Map<T> {
-    pub fn get(&self, row: usize, col: usize) -> Option<&T> {
-        if row < self.height && col < self.width {
-            self.data.get(row * self.width + col)
-        } else {
-            None
+impl<T: Display> Map2D<T> {
+    pub fn index(&self, x: usize, y: usize) -> usize {
+        y * self.width + x
+    }
+
+    pub fn get(&self, x: usize, y: usize) -> Option<&T> {
+        if x >= self.height || y >= self.width {
+            return None;
         }
+        self.data.get(self.index(x, y))
+    }
+
+    pub fn get_isize(&self, x: isize, y: isize) -> Option<&T> {
+        if x < 0 || y < 0 {
+            return None;
+        }
+        self.get(x as usize, y as usize)
+    }
+
+    pub fn print_map(&self) {
+        for row in 0..self.height {
+            for col in 0..self.width {
+                print!("{} ", self.data[row * self.width + col]);
+            }
+            println!();
+        }
+        println!();
+    }
+
+    pub fn width(&self) -> usize {
+        self.width
+    }
+
+    pub fn height(&self) -> usize {
+        self.height
     }
 }
 
-impl<T: ParseElement> Map<T> {
-    pub fn from_lines(lines: Lines<BufReader<File>>) -> Self {
-        let mut data = Vec::new();
+pub trait FromLines: Sized {
+    fn from_lines(lines: Lines<BufReader<File>>) -> Self;
+}
+
+impl FromLines for Map2D<String> {
+    fn from_lines(lines: Lines<BufReader<File>>) -> Self {
+        let mut data: Vec<String> = vec![];
         let mut width: usize = 0;
-        let mut height = 0;
+        let mut height: usize = 0;
 
         for line in lines {
-            let line = line.unwrap();
+            let line = line.expect("Failed to read line");
             if line.is_empty() {
                 continue;
             }
@@ -50,11 +66,11 @@ impl<T: ParseElement> Map<T> {
             width = line.len();
 
             for char in line.chars() {
-                data.push(ParseElement::parse_element(char));
+                data.push(String::from(char));
             }
         }
 
-        Map {
+        Map2D {
             data,
             width,
             height,
@@ -62,83 +78,30 @@ impl<T: ParseElement> Map<T> {
     }
 }
 
-impl<T> Map<T>
-where
-    T: Display,
-{
-    pub fn print_map(&self) {
-        for row in 0..self.height {
-            for col in 0..self.width {
-                // Use Display trait to print each element with a space
-                print!("{} ", self.data[row * self.width + col]);
+impl FromLines for Map2D<isize> {
+    fn from_lines(lines: Lines<BufReader<File>>) -> Self {
+        let mut data: Vec<isize> = vec![];
+        let mut width: usize = 0;
+        let mut height: usize = 0;
+
+        for line in lines {
+            let line = line.expect("Failed to read line");
+            if line.is_empty() {
+                continue;
             }
-            println!();
-        }
-        println!();
-    }
-}
 
-pub struct IntMap {
-    map: Map<i32>,
-}
+            height += 1;
+            width = line.len();
 
-impl IntMap {
-    pub fn from_lines(lines: Lines<BufReader<File>>) -> Self {
-        Self {
-            map: Map::from_lines(lines),
-        }
-    }
-
-    pub fn width(&self) -> usize {
-        self.map.width
-    }
-    pub fn height(&self) -> usize {
-        self.map.height
-    }
-
-    pub fn get(&self, row: usize, col: usize) -> Option<i32> {
-        self.map.get(row, col).copied()
-    }
-
-    pub fn print_map(&self) {
-        self.map.print_map();
-    }
-}
-
-pub struct StringMap {
-    map: Map<String>,
-}
-
-impl StringMap {
-    pub fn from_lines(lines: Lines<BufReader<File>>) -> Self {
-        Self {
-            map: Map::from_lines(lines),
-        }
-    }
-
-    pub fn width(&self) -> usize {
-        self.map.width
-    }
-    pub fn height(&self) -> usize {
-        self.map.height
-    }
-
-    pub fn get(&self, row: usize, col: usize) -> Option<String> {
-        Some(self.map.get(row, col).unwrap().to_string())
-    }
-
-    pub fn get_isize(&self, row: isize, col: isize) -> Option<String> {
-        if row < 0 || col < 0 {
-            return None;
+            for char in line.chars() {
+                data.push(char.to_digit(10).expect("Could not parse char into digit.") as isize);
+            }
         }
 
-        match self.map.get(row as usize, col as usize) {
-            Some(v) => Some(v.to_string()),
-            None => None,
+        Map2D {
+            data,
+            width,
+            height,
         }
-    }
-
-    pub fn print_map(&self) {
-        self.map.print_map();
     }
 }
