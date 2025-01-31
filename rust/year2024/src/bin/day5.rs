@@ -1,5 +1,6 @@
-use aoc_shared::{get_input, report_times};
-use simple_stopwatch::Stopwatch;
+use std::time::Instant;
+
+use aoc_shared::{read_input, report_times};
 
 fn is_correct(update: &Vec<usize>, rules: &Vec<Vec<usize>>) -> bool {
     let mut is_correct = true;
@@ -60,10 +61,10 @@ fn count_in_fixed_updates(rules: &Vec<Vec<usize>>, updates: Vec<Vec<usize>>) -> 
 }
 
 fn main() {
-    let watch = Stopwatch::start_new();
+    let start = Instant::now();
 
     // read and parse file
-    let input = get_input("2024", "5", false).unwrap();
+    let input = read_input("2024", "5", false).unwrap();
     let mut rules_processed = false;
     let mut rules: Vec<Vec<usize>> = Vec::new();
     let mut updates: Vec<Vec<usize>> = Vec::new();
@@ -90,15 +91,15 @@ fn main() {
             .collect::<Vec<usize>>();
         updates.push(update);
     }
-    let file_read_time = watch.us();
+    let file_read_time = start.elapsed();
 
     // part 1
     println!("{}", count_in_correct_updates(&rules, &updates));
-    let part1_time = watch.us();
+    let part1_time = start.elapsed();
 
     // part 2
     println!("{}", count_in_fixed_updates(&rules, updates));
-    let part2_time = watch.us();
+    let part2_time = start.elapsed();
 
     // report times
     report_times(file_read_time, part1_time, part2_time);

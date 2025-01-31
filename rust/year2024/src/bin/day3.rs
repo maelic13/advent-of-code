@@ -1,6 +1,8 @@
-use aoc_shared::{get_input, report_times};
+use std::time::Instant;
+
 use regex::Regex;
-use simple_stopwatch::Stopwatch;
+
+use aoc_shared::{read_input, report_times};
 
 fn advanced_section_analysis(section: &String) -> usize {
     let mut result: usize = 0;
@@ -31,21 +33,21 @@ fn section_analysis(section: &String) -> usize {
 }
 
 fn main() {
-    let watch = Stopwatch::start_new();
+    let start = Instant::now();
 
     // read and parse file
-    let input = get_input("2024", "3", false).unwrap();
+    let input = read_input("2024", "3", false).unwrap();
 
     let memory_sections: String = input.map(|l| l.unwrap()).collect::<Vec<_>>().join("");
-    let file_read_time = watch.us();
+    let file_read_time = start.elapsed();
 
     // part 1
     println!("{}", section_analysis(&memory_sections));
-    let part1_time = watch.us();
+    let part1_time = start.elapsed();
 
     // part 2
     println!("{}", advanced_section_analysis(&memory_sections));
-    let part2_time = watch.us();
+    let part2_time = start.elapsed();
 
     // report times
     report_times(file_read_time, part1_time, part2_time);

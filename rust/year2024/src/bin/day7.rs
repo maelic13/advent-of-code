@@ -1,5 +1,6 @@
-use aoc_shared::{get_input, report_times};
-use simple_stopwatch::Stopwatch;
+use std::time::Instant;
+
+use aoc_shared::{read_input, report_times};
 
 fn count_valid(
     equations: &Vec<(usize, Vec<usize>)>,
@@ -60,10 +61,10 @@ fn con(item1: usize, item2: usize) -> usize {
 }
 
 fn main() {
-    let watch = Stopwatch::start_new();
+    let start = Instant::now();
 
     // read and parse file
-    let input = get_input("2024", "7", false).unwrap();
+    let input = read_input("2024", "7", false).unwrap();
     let mut equations: Vec<(usize, Vec<usize>)> = Vec::new();
 
     for line in input {
@@ -83,15 +84,15 @@ fn main() {
                 .collect(),
         ));
     }
-    let file_read_time = watch.us();
+    let file_read_time = start.elapsed();
 
     // part 1
     println!("{}", count_valid(&equations, vec![add, mul]));
-    let part1_time = watch.us();
+    let part1_time = start.elapsed();
 
     // part 2
     println!("{}", count_valid(&equations, vec![add, mul, con]));
-    let part2_time = watch.us();
+    let part2_time = start.elapsed();
 
     // report times
     report_times(file_read_time, part1_time, part2_time);

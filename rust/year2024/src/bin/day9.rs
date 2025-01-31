@@ -1,7 +1,7 @@
 use std::iter::zip;
+use std::time::Instant;
 
-use aoc_shared::{get_input, report_times};
-use simple_stopwatch::Stopwatch;
+use aoc_shared::{read_input, report_times};
 
 fn calculate_checksum(disk: &Vec<String>) -> usize {
     let mut checksum = 0;
@@ -123,10 +123,10 @@ fn print_disk(disk: &Vec<String>) {
 }
 
 fn main() {
-    let watch = Stopwatch::start_new();
+    let start = Instant::now();
 
     // read and parse file
-    let input = get_input("2024", "9", false).unwrap();
+    let input = read_input("2024", "9", false).unwrap();
     let mut disk_map: Vec<char> = vec![];
 
     for line in input {
@@ -139,18 +139,18 @@ fn main() {
         }
     }
     let mut disk: Vec<String> = translate_disk_map(&disk_map);
-    let file_read_time = watch.us();
+    let file_read_time = start.elapsed();
 
     // part 1
     let mut modified_disk = disk.to_vec();
     move_bits_to_front(&mut modified_disk);
     println!("{}", calculate_checksum(&modified_disk));
-    let part1_time = watch.us();
+    let part1_time = start.elapsed();
 
     // part 2
     move_files_to_front(&mut disk);
     println!("{}", calculate_checksum(&disk));
-    let part2_time = watch.us();
+    let part2_time = start.elapsed();
 
     // report times
     report_times(file_read_time, part1_time, part2_time);

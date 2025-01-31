@@ -1,7 +1,7 @@
 use std::collections::HashMap;
+use std::time::Instant;
 
-use aoc_shared::{get_input, report_times};
-use simple_stopwatch::Stopwatch;
+use aoc_shared::{read_input, report_times};
 
 fn count_stones_after_blinks(mut stones: HashMap<String, usize>, blinks: usize) -> usize {
     for _ in 0..blinks {
@@ -48,12 +48,12 @@ fn blink(stone: &String) -> (String, Option<String>) {
 }
 
 fn main() {
-    let watch = Stopwatch::start_new();
+    let start = Instant::now();
 
     // read and parse file
-    let input = get_input("2024", "11", false).unwrap();
+    let input = read_input("2024", "11", false).unwrap();
     let mut stones: HashMap<String, usize> = HashMap::new();
-    let file_read_time = watch.us();
+    let file_read_time = start.elapsed();
 
     for line in input {
         let line = line.unwrap();
@@ -67,11 +67,11 @@ fn main() {
 
     // part 1
     println!("{}", count_stones_after_blinks(stones.clone(), 25));
-    let part1_time = watch.us();
+    let part1_time = start.elapsed();
 
     // part 2
     println!("{}", count_stones_after_blinks(stones, 75));
-    let part2_time = watch.us();
+    let part2_time = start.elapsed();
 
     // report times
     report_times(file_read_time, part1_time, part2_time);

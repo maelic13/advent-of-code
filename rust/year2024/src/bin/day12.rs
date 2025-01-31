@@ -1,8 +1,7 @@
-use simple_stopwatch::Stopwatch;
 use std::collections::HashSet;
+use std::time::Instant;
 
-use aoc_shared::map::Map2D;
-use aoc_shared::{get_input, report_times};
+use aoc_shared::{read_input, Map2D, report_times};
 
 struct Area {
     plots: HashSet<(isize, isize)>,
@@ -180,12 +179,12 @@ fn find_area_from_position(
 }
 
 fn main() {
-    let watch = Stopwatch::start_new();
+    let start = Instant::now();
 
     // read and parse file
-    let input = get_input("2024", "12", false).unwrap();
+    let input = read_input("2024", "12", false).unwrap();
     let map: Map2D<char> = Map2D::from_lines(input);
-    let file_read_time = watch.us();
+    let file_read_time = start.elapsed();
 
     // part 1
     let areas = find_areas(&map);
@@ -193,7 +192,7 @@ fn main() {
         "{}",
         areas.iter().map(|area| area.fence_cost()).sum::<usize>()
     );
-    let part1_time = watch.us();
+    let part1_time = start.elapsed();
 
     // part 2
     println!(
@@ -203,7 +202,7 @@ fn main() {
             .map(|area| area.fence_cost_discounted())
             .sum::<usize>()
     );
-    let part2_time = watch.us();
+    let part2_time = start.elapsed();
 
     // report times
     report_times(file_read_time, part1_time, part2_time);

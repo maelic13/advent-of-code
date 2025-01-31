@@ -1,6 +1,8 @@
-use aoc_shared::{get_input, report_times};
+use std::time::Instant;
+
 use regex::Regex;
-use simple_stopwatch::Stopwatch;
+
+use aoc_shared::{read_input, report_times};
 
 fn count_words_in_string(string: &String, word: &str) -> usize {
     let mut words_counted: usize = 0;
@@ -108,10 +110,10 @@ fn is_xmas(area: Vec<&str>) -> bool {
 }
 
 fn main() {
-    let watch = Stopwatch::start_new();
+    let start = Instant::now();
 
     // read and parse file
-    let input = get_input("2024", "4", false).unwrap();
+    let input = read_input("2024", "4", false).unwrap();
     let mut word_search: Vec<String> = vec![];
 
     for line in input {
@@ -121,15 +123,15 @@ fn main() {
         }
         word_search.push(line);
     }
-    let file_read_time = watch.us();
+    let file_read_time = start.elapsed();
 
     // part 1
     println!("{}", count_words(&word_search, "XMAS"));
-    let part1_time = watch.us();
+    let part1_time = start.elapsed();
 
     // part 2
     println!("{}", find_xmas(&word_search));
-    let part2_time = watch.us();
+    let part2_time = start.elapsed();
 
     // report times
     report_times(file_read_time, part1_time, part2_time);

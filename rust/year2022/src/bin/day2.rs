@@ -1,5 +1,5 @@
-use aoc_shared::{get_input, report_times};
-use simple_stopwatch::Stopwatch;
+use std::time::Instant;
+use aoc_shared::{read_input, report_times};
 
 pub struct RPSPlayer {
     pub win_score: usize,
@@ -120,10 +120,10 @@ impl RPSPlayer {
 }
 
 fn main() {
-    let watch = Stopwatch::start_new();
+    let start = Instant::now();
 
     // read and parse file
-    let input = get_input("2022", "2", false).unwrap();
+    let input = read_input("2022", "2", false).unwrap();
     let mut data: Vec<Vec<String>> = vec![];
 
     for line in input {
@@ -133,7 +133,7 @@ fn main() {
         }
         data.push(buff);
     }
-    let file_read_time = watch.us();
+    let file_read_time = start.elapsed();
 
     // part 1
     let mut total_score = 0;
@@ -141,7 +141,7 @@ fn main() {
     for moves in &data {
         total_score += game.evaluate(&moves[1], &moves[0]);
     }
-    let part1_time = watch.us();
+    let part1_time = start.elapsed();
     println!("{}", total_score);
 
     // part 2
@@ -149,7 +149,7 @@ fn main() {
     for moves in &data {
         total_score += game.evaluate_with_result(&moves[1], &moves[0]);
     }
-    let part2_time = watch.us();
+    let part2_time = start.elapsed();
     println!("{}", total_score);
 
     // report times

@@ -1,13 +1,13 @@
 use std::collections::HashMap;
+use std::time::Instant;
 
-use aoc_shared::{get_input, report_times};
-use simple_stopwatch::Stopwatch;
+use aoc_shared::{read_input, report_times};
 
 fn main() {
-    let watch = Stopwatch::start_new();
+    let start = Instant::now();
 
     // read and parse file
-    let input = get_input("2024", "1", false).unwrap();
+    let input = read_input("2024", "1", false).unwrap();
     let mut firsts: Vec<usize> = vec![];
     let mut seconds: Vec<usize> = vec![];
 
@@ -20,7 +20,7 @@ fn main() {
         firsts.push(parts.next().unwrap().parse::<usize>().unwrap());
         seconds.push(parts.next().unwrap().parse::<usize>().unwrap());
     }
-    let file_read_time = watch.us();
+    let file_read_time = start.elapsed();
 
     // part 1
     firsts.sort();
@@ -31,7 +31,7 @@ fn main() {
     }
 
     println!("{}", result);
-    let part1_time = watch.us();
+    let part1_time = start.elapsed();
 
     // part 2
     let mut hash_map: HashMap<usize, usize> = HashMap::new();
@@ -50,7 +50,7 @@ fn main() {
         .map(|&i| i * hash_map.get(&i).unwrap_or_else(|| &0))
         .sum();
     println!("{}", result);
-    let part2_time = watch.us();
+    let part2_time = start.elapsed();
 
     // report times
     report_times(file_read_time, part1_time, part2_time);

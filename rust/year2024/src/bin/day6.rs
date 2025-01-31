@@ -1,12 +1,10 @@
 use std::collections::HashSet;
 use std::io::{Error, ErrorKind};
 use std::iter::Cycle;
+use std::time::Instant;
 use std::vec::IntoIter;
 
-use simple_stopwatch::Stopwatch;
-
-use aoc_shared::map::Map2D;
-use aoc_shared::{get_input, report_times};
+use aoc_shared::{read_input, Map2D, report_times};
 
 struct Library {
     map: Map2D<char>,
@@ -131,12 +129,12 @@ impl Library {
 }
 
 fn main() {
-    let watch = Stopwatch::start_new();
+    let start = Instant::now();
 
     // read and parse file
-    let input = get_input("2024", "6", false).unwrap();
+    let input = read_input("2024", "6", false).unwrap();
     let map: Map2D<char> = Map2D::from_lines(input);
-    let file_read_time = watch.us();
+    let file_read_time = start.elapsed();
 
     // part 1
     let (guard_position, guard_direction) =
@@ -150,14 +148,14 @@ fn main() {
     };
     let _ = library.move_guard();
     println!("{}", library.get_unique_history_positions().len());
-    let part1_time = watch.us();
+    let part1_time = start.elapsed();
 
     // part 2
     library.direction = guard_direction;
     library.guard = guard_position;
 
     println!("{}", library.count_obstacles_to_cause_loop());
-    let part2_time = watch.us();
+    let part2_time = start.elapsed();
 
     // report times
     report_times(file_read_time, part1_time, part2_time);

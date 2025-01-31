@@ -6,28 +6,22 @@ fn main() {
     let start = Instant::now();
 
     // read and parse file
-    let input = read_input("2022", "1", false).unwrap();
-    let mut sums: Vec<usize> = vec![];
-    let mut buff: usize = 0;
+    let input = read_input("2024", "13", true).unwrap();
 
     for line in input {
         let line = line.unwrap();
-        if line.is_empty() {
-            sums.push(buff);
-            buff = 0;
-            continue;
-        }
-        buff += line.parse::<usize>().unwrap();
+        if line.is_empty() { continue; }
     }
     let file_read_time = start.elapsed();
 
     // part 1
-    println!("{}", sums.iter().max().unwrap());
+    let result: isize = 0;
+    println!("{}", result);
     let part1_time = start.elapsed();
 
     // part 2
-    sums.sort();
-    println!("{}", sums[sums.len() - 3..].iter().sum::<usize>());
+    let result: isize = 0;
+    println!("{}", result);
     let part2_time = start.elapsed();
 
     // report times

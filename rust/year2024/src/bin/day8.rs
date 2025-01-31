@@ -1,8 +1,9 @@
 use std::collections::{HashMap, HashSet};
+use std::time::Instant;
 
-use aoc_shared::{get_input, report_times};
 use itertools::Itertools;
-use simple_stopwatch::Stopwatch;
+
+use aoc_shared::{read_input, report_times};
 
 fn count_unique_antinodes(map: &Vec<Vec<char>>, find_all: bool) -> usize {
     let mut all_antennas: HashMap<char, Vec<(usize, usize)>> = HashMap::new();
@@ -94,21 +95,21 @@ fn find_antinodes(
 }
 
 fn main() {
-    let watch = Stopwatch::start_new();
+    let start = Instant::now();
 
     // read and parse file
-    let input = get_input("2024", "8", false).unwrap();
+    let input = read_input("2024", "8", false).unwrap();
 
     let map: Vec<Vec<char>> = input.map(|line| line.unwrap().chars().collect()).collect();
-    let file_read_time = watch.us();
+    let file_read_time = start.elapsed();
 
     // part 1
     println!("{}", count_unique_antinodes(&map, false));
-    let part1_time = watch.us();
+    let part1_time = start.elapsed();
 
     // part 2
     println!("{}", count_unique_antinodes(&map, true));
-    let part2_time = watch.us();
+    let part2_time = start.elapsed();
 
     // report times
     report_times(file_read_time, part1_time, part2_time);
