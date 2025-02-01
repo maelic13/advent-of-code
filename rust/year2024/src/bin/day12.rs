@@ -1,7 +1,7 @@
 use std::collections::HashSet;
 use std::time::Instant;
 
-use aoc_shared::{read_input, Map2D, report_times};
+use aoc_shared::{read_input, report_times, Map2D};
 
 struct Area {
     plots: HashSet<(isize, isize)>,

@@ -1,4 +1,5 @@
 use std::time::Instant;
+
 use aoc_shared::{read_input, report_times};
 
 pub struct RPSPlayer {

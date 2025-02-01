@@ -10,7 +10,9 @@ fn main() {
 
     for line in input {
         let line = line.unwrap();
-        if line.is_empty() { continue; }
+        if line.is_empty() {
+            continue;
+        }
     }
     let file_read_time = start.elapsed();
 

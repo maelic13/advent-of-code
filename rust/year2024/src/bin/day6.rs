@@ -4,7 +4,7 @@ use std::iter::Cycle;
 use std::time::Instant;
 use std::vec::IntoIter;
 
-use aoc_shared::{read_input, Map2D, report_times};
+use aoc_shared::{read_input, report_times, Map2D};
 
 struct Library {
     map: Map2D<char>,
