@@ -1,15 +1,16 @@
+use std::error::Error;
 use std::time::Instant;
 
 use aoc_shared::{get_input, report_times};
 
-fn main() {
+fn main() -> Result<(), Box<dyn Error>> {
     let start = Instant::now();
 
     // read and parse file
-    let input = get_input("2024", "1", true).unwrap();
+    let input = get_input("2024", "1", true)?;
 
     for line in input {
-        let line = line.unwrap();
+        let line = line?;
         if line.is_empty() {
             continue;
         }
