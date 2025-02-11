@@ -1,13 +1,13 @@
 use std::error::Error;
 use std::time::Instant;
 
-use aoc_shared::{get_input, report_times};
+use aoc_shared::{read_input, report_times};
 
 fn main() -> Result<(), Box<dyn Error>> {
     let start = Instant::now();
 
     // read and parse file
-    let input = get_input("2024", "1", true)?;
+    let input = read_input("2024", "1", true)?;
 
     for line in input {
         let line = line?;
@@ -29,4 +29,5 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     // report times
     report_times(file_read_time, part1_time, part2_time);
+    Ok(())
 }
