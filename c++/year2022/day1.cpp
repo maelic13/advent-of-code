@@ -1,13 +1,12 @@
 #include <algorithm>
-#include <fstream>
 #include <chrono>
+#include <fstream>
 #include <iostream>
 #include <numeric>
 #include <vector>
 
 using namespace std;
 using namespace std::chrono;
-
 
 int main() {
     const auto start = high_resolution_clock::now();
@@ -26,23 +25,20 @@ int main() {
         }
         sum += stoi(line);
     }
-    const auto file_read_time = duration_cast<microseconds>(
-        high_resolution_clock::now() - start
-        ).count();
+    const auto file_read_time =
+        duration_cast<microseconds>(high_resolution_clock::now() - start).count();
 
     // part 1
     cout << *ranges::max_element(sums) << endl;
-    const auto part1_time = duration_cast<microseconds>(
-        high_resolution_clock::now() - start
-        ).count() - file_read_time;
+    const auto part1_time =
+        duration_cast<microseconds>(high_resolution_clock::now() - start).count() - file_read_time;
 
-
-    //part 2
+    // part 2
     ranges::sort(sums);
     cout << reduce(sums.end() - 3, sums.end()) << endl;
-    const auto part2_time = duration_cast<microseconds>(
-        high_resolution_clock::now() - start
-        ).count() - part1_time - file_read_time;
+    const auto part2_time =
+        duration_cast<microseconds>(high_resolution_clock::now() - start).count() - part1_time -
+        file_read_time;
 
     // report times
     cout << endl;

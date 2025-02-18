@@ -1,15 +1,14 @@
-#include <fstream>
 #include <chrono>
+#include <fstream>
 #include <iostream>
-#include <vector>
 #include <tuple>
+#include <vector>
 
 using namespace std;
 using namespace std::chrono;
 
-
 class RPSPlayer {
-public:
+   public:
     int win_score = 6;
     int draw_score = 3;
     int lose_score = 0;
@@ -26,7 +25,8 @@ public:
         player_move = translate_move(player_move);
         int score = get_move_score(player_move);
 
-        if (const tuple<char, char> move(player_move, opponent_move); ranges::find(wins, move) != wins.end())
+        if (const tuple<char, char> move(player_move, opponent_move);
+            ranges::find(wins, move) != wins.end())
             score += win_score;
         else if (ranges::find(draws, move) != draws.end())
             score += draw_score;
@@ -41,12 +41,17 @@ public:
         char player_move;
         vector<tuple<char, char>>* to_search;
 
-        if (result == 'X') { to_search = &losses; }
-        else if (result == 'Y') { to_search = &draws; }
-        else if (result == 'Z') { to_search = &wins; }
-        else { throw runtime_error("Incorrect result: " + to_string(result)); }
+        if (result == 'X') {
+            to_search = &losses;
+        } else if (result == 'Y') {
+            to_search = &draws;
+        } else if (result == 'Z') {
+            to_search = &wins;
+        } else {
+            throw runtime_error("Incorrect result: " + to_string(result));
+        }
 
-        for (tuple<char, char> game_result: *to_search)
+        for (tuple<char, char> game_result : *to_search)
             if (get<1>(game_result) == opponent_move) {
                 player_move = get<0>(game_result);
                 break;
@@ -70,7 +75,6 @@ public:
     }
 };
 
-
 int main() {
     auto start = high_resolution_clock::now();
 
@@ -84,8 +88,7 @@ int main() {
         const char* currentChar = line.c_str();
 
         for (int i = 0; i < 3; i++) {
-            if (*currentChar != ' ')
-                item += *currentChar;
+            if (*currentChar != ' ') item += *currentChar;
             *currentChar++;
         }
         data.push_back(item);
@@ -95,19 +98,18 @@ int main() {
     // part 1
     int total_score = 0;
     RPSPlayer game;
-    for (auto choices: data) {
+    for (auto choices : data) {
         total_score += game.evaluate(choices[0], choices[1]);
     }
-    auto part1_time = duration_cast<microseconds>(high_resolution_clock::now() - start).count()
-            - file_read_time;
+    auto part1_time =
+        duration_cast<microseconds>(high_resolution_clock::now() - start).count() - file_read_time;
     cout << total_score << endl;
 
     // part 2
     total_score = 0;
-    for (auto inputs: data)
-        total_score += game.evaluate_with_result(inputs[0], inputs[1]);
-    auto part2_time = duration_cast<microseconds>(high_resolution_clock::now() - start).count()
-            - part1_time - file_read_time;
+    for (auto inputs : data) total_score += game.evaluate_with_result(inputs[0], inputs[1]);
+    auto part2_time = duration_cast<microseconds>(high_resolution_clock::now() - start).count() -
+                      part1_time - file_read_time;
     cout << total_score << endl;
 
     cout << endl;
