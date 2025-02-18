@@ -4,43 +4,40 @@ use aoc_shared::{read_input, report_times};
 
 fn count_valid(
     equations: &Vec<(usize, Vec<usize>)>,
-    available_operands: Vec<fn(usize, usize) -> usize>,
+    available_operands: &[fn(usize, usize) -> usize],
 ) -> usize {
     let mut count: usize = 0;
 
     for (result, numbers) in equations {
-        let (valid, result) = is_valid(
-            numbers[0],
-            result,
-            &numbers[1..].to_vec(),
-            &available_operands,
-        );
-        if valid {
-            count += result;
+        match is_valid(1, numbers[0], *result, numbers, available_operands) {
+            (true, res) => count += res,
+            _ => continue,
         }
     }
     count
 }
 
 fn is_valid(
+    current_index: usize,
     current_result: usize,
-    expected_result: &usize,
+    expected_result: usize,
     numbers: &Vec<usize>,
-    available_operands: &Vec<fn(usize, usize) -> usize>,
+    available_operands: &[fn(usize, usize) -> usize],
 ) -> (bool, usize) {
-    if numbers.is_empty() || current_result > *expected_result {
-        return (current_result == *expected_result, current_result);
+    if current_index == numbers.len() || current_result > expected_result {
+        return (current_result == expected_result, current_result);
     }
 
     for operand in available_operands {
-        let (valid, result) = is_valid(
-            operand(current_result, numbers[0]),
+        match is_valid(
+            current_index + 1,
+            operand(current_result, numbers[current_index]),
             expected_result,
-            &numbers[1..].to_vec(),
+            numbers,
             available_operands,
-        );
-        if valid {
-            return (true, result);
+        ) {
+            (true, res) => return (true, res),
+            _ => continue,
         }
     }
     (false, 0)
@@ -55,9 +52,17 @@ fn mul(item1: usize, item2: usize) -> usize {
 }
 
 fn con(item1: usize, item2: usize) -> usize {
-    (item1.to_string() + item2.to_string().as_str())
-        .parse::<usize>()
-        .unwrap()
+    // Instead of transfer to String and concatenate, multiply item1 by 10 to the power of item2's
+    // number of digits and add item2. This is much faster.
+    // Starting with multiplier 10 instead of 1 causes ~2ms speed loss, possibly due to compiler
+    // optimizations.
+    let mut multiplier: usize = 1;
+
+    while item2 / multiplier > 0 {
+        multiplier *= 10;
+    }
+
+    item1 * multiplier + item2
 }
 
 fn main() {
@@ -87,11 +92,11 @@ fn main() {
     let file_read_time = start.elapsed();
 
     // part 1
-    println!("{}", count_valid(&equations, vec![add, mul]));
+    println!("{}", count_valid(&equations, &[mul, add]));
     let part1_time = start.elapsed();
 
     // part 2
-    println!("{}", count_valid(&equations, vec![add, mul, con]));
+    println!("{}", count_valid(&equations, &[mul, add, con]));
     let part2_time = start.elapsed();
 
     // report times
