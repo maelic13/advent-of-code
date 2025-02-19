@@ -92,13 +92,15 @@ fn main() {
     let file_read_time = start.elapsed();
 
     // part 1
-    println!("{}", count_valid(&equations, &[mul, add]));
+    let part1_result = count_valid(&equations, &[mul, add]);
     let part1_time = start.elapsed();
 
     // part 2
-    println!("{}", count_valid(&equations, &[mul, add, con]));
+    let part2_result = count_valid(&equations, &[mul, add, con]);
     let part2_time = start.elapsed();
 
-    // report times
+    // report results and times
+    println!("{part1_result}");
+    println!("{part2_result}");
     report_times(file_read_time, part1_time, part2_time);
 }

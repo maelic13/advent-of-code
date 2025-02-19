@@ -18,16 +18,16 @@ fn main() -> Result<(), Box<dyn Error>> {
     let file_read_time = start.elapsed();
 
     // part 1
-    let result: isize = 0;
-    println!("{}", result);
+    let part1_result: isize = 0;
     let part1_time = start.elapsed();
 
     // part 2
-    let result: isize = 0;
-    println!("{}", result);
+    let part2_result: isize = 0;
     let part2_time = start.elapsed();
 
-    // report times
+    // report results and times
+    println!("{part1_result}");
+    println!("{part2_result}");
     report_times(file_read_time, part1_time, part2_time);
     Ok(())
 }

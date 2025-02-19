@@ -1,9 +1,5 @@
-#include <algorithm>
-#include <chrono>
 #include <fstream>
 #include <iostream>
-#include <numeric>
-#include <vector>
 
 #include "aoc_shared.h"
 
@@ -14,28 +10,19 @@ auto main() -> int {
     const auto start = steady_clock::now();
 
     // read and parse file
-    ifstream file = read_input("2022", "1", false);
-    vector<int> sums = {};
-    int sum = 0;
-
+    ifstream file = read_input("2024", "1", true);
     string line;
     while (getline(file, line)) {
-        if (line.empty()) {
-            sums.push_back(sum);
-            sum = 0;
-            continue;
-        }
-        sum += stoi(line);
+        if (line.empty()) continue;
     }
     const auto file_read_time = steady_clock::now() - start;
 
     // part 1
-    const auto part1_result = *ranges::max_element(sums);
+    auto part1_result = 0;
     const auto part1_time = steady_clock::now() - start;
 
     // part 2
-    ranges::sort(sums);
-    const auto part2_result = reduce(sums.end() - 3, sums.end());
+    auto part2_result = 0;
     const auto part2_time = steady_clock::now() - start;
 
     // report results and times
