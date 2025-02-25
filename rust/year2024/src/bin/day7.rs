@@ -54,15 +54,7 @@ fn mul(item1: usize, item2: usize) -> usize {
 fn con(item1: usize, item2: usize) -> usize {
     // Instead of transfer to String and concatenate, multiply item1 by 10 to the power of item2's
     // number of digits and add item2. This is much faster.
-    // Starting with multiplier 10 instead of 1 causes ~2ms speed loss, possibly due to compiler
-    // optimizations.
-    let mut multiplier: usize = 1;
-
-    while item2 / multiplier > 0 {
-        multiplier *= 10;
-    }
-
-    item1 * multiplier + item2
+    item1 * 10usize.pow(item2.ilog10() + 1) + item2
 }
 
 fn main() {
