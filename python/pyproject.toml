@@ -1,0 +1,58 @@
+[project]
+name = "advent-of-code"
+version = "1.0.0"
+authors = [{name = "Miloslav Macůrek"}]
+description = "Solutions to Advent of Code challenges"
+requires-python = ">=3.10"
+license = "GPL-3.0-or-later"
+
+dependencies = [
+    "advent-of-code-data",
+    "more-itertools",
+    "numpy",
+    "regex",
+    "ruff",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py314"
+
+exclude = [
+    "__pycache__",
+    ".git",
+    ".idea",
+    ".venv",
+]
+
+[tool.ruff.lint]
+select = ["ALL"]
+
+ignore = [
+    "ANN401",
+    "B017",
+    "B901",
+    "COM812",
+    "CPY",
+    "D",
+    "DOC",
+    "ERA001",
+    "FIX002",
+    "G004",
+    "NPY002",
+    "PTH123",
+    "PLR2004",
+    "S311",
+    "T201",
+    "TD",
+    "TID252",
+]
+
+[tool.ruff.lint.isort]
+section-order = [
+    "future",
+    "standard-library",
+    "third-party",
+    "first-party",
+    "local-folder"
+]
