@@ -1,5 +1,7 @@
 from time import time_ns
 
+from infra import read_input, report_times
+
 
 def count_accessible_paper(diagram: list[list[int]]) -> int:
     accessible: list[tuple[int, int]] = []
@@ -14,23 +16,27 @@ def count_accessible_paper(diagram: list[list[int]]) -> int:
         diagram[row][col] = 0
     return len(accessible)
 
-def day4() -> None:
-    with open("inputs/2025/day4.txt", encoding="utf-8") as file:
-        lines = file.readlines()
 
-    # part 1
+def day4() -> None:
+    start = time_ns()
+
+    # read and parse file
+    inputs = read_input(2025, 4, example=False).splitlines()
+
     diagram: list[list[int]] = []
-    for line in lines:
-        row = [1 if x == "@" else 0 for x in line.strip()]
+    for line in inputs:
+        row = [1 if x == "@" else 0 for x in line]
         row.insert(0, 0)
         row.append(0)
         diagram.append(row)
     diagram.insert(0, [0] * len(diagram[0]))
     diagram.append([0] * len(diagram[0]))
     can_be_removed = count_accessible_paper(diagram)
+    file_read_time = time_ns() - start
 
     # part 1
     print(can_be_removed)
+    part1_time = time_ns() - start
 
     # part 2
     while True:
@@ -39,10 +45,11 @@ def day4() -> None:
             break
         can_be_removed += can_be_removed_new
     print(can_be_removed)
+    part2_time = time_ns() - start
 
+    # report times
+    report_times(file_read_time, part1_time, part2_time)
 
 
 if __name__ == "__main__":
-    start = time_ns()
     day4()
-    print(f"Execution time: {round((time_ns() - start) // 1000000)} milliseconds.")
