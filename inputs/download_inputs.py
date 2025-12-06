@@ -8,13 +8,11 @@ from aocd import get_data
 # Consult https://github.com/wimglenn/advent-of-code-data for more information.
 # Edit def _limiter(self): to remove download delay
 if __name__ == "__main__":
-    with open("token.txt", "r") as token_file:
-        token = token_file.read().strip()
+    token = (Path(__file__).parent / "token.txt").read_text(encoding="utf-8").strip()
     os.environ["AOC_SESSION"] = token
 
-    for year in range(2024, 2025):
+    for year in range(2019, 2026):
         for day in range(1, 26):
-            file_path = Path(f"{year}/day{day}.txt")
+            file_path = Path(__file__).parent / f"{year}/day{day}.txt"
             file_path.parent.mkdir(parents=True, exist_ok=True)
-            with open(file_path, "w") as f:
-                f.write(get_data(day=day, year=year))
+            file_path.write_text(get_data(day=day, year=year), encoding="utf-8")

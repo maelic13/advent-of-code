@@ -1,22 +1,30 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "advent-of-code"
 version = "1.0.0"
-authors = [{name = "Miloslav Macůrek"}]
+authors = [{name = "Miloslav Macurek"}]
 description = "Solutions to Advent of Code challenges"
-requires-python = ">=3.10"
-license = "GPL-3.0-or-later"
+requires-python = ">=3.12"
+license = {text = "GPL-3.0-or-later"}
 
 dependencies = [
     "advent-of-code-data",
     "more-itertools",
     "numpy",
     "regex",
+]
+
+[project.optional-dependencies]
+dev = [
     "ruff",
 ]
 
 [tool.ruff]
 line-length = 100
-target-version = "py314"
+target-version = "py312"
 
 exclude = [
     "__pycache__",
@@ -54,5 +62,5 @@ section-order = [
     "standard-library",
     "third-party",
     "first-party",
-    "local-folder"
+    "local-folder",
 ]

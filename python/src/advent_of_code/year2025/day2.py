@@ -2,7 +2,7 @@ from time import time_ns
 
 from regex import findall
 
-from infra import read_input, report_times
+from advent_of_code.infra import read_input, report_times
 
 
 def is_id_invalid(i: int) -> bool:

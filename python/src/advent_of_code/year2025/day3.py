@@ -1,6 +1,6 @@
 from time import time_ns
 
-from infra import read_input, report_times
+from advent_of_code.infra import read_input, report_times
 
 
 def max_power(batteries: str, battery_count: int) -> int:
