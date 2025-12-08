@@ -43,7 +43,7 @@ def count_realities(
     return count
 
 
-def day6() -> None:
+def day7() -> None:
     start = time_ns()
 
     # read and parse file
@@ -63,4 +63,4 @@ def day6() -> None:
 
 
 if __name__ == "__main__":
-    day6()
+    day7()
