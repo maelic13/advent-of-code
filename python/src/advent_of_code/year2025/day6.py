@@ -1,3 +1,4 @@
+from itertools import starmap
 from math import prod
 from time import time_ns
 
@@ -43,7 +44,7 @@ def day6() -> None:
             buffer.append(list(col[:-1]))
     to_calculate.append((buffer, operator))
 
-    print(sum(cephalopod_calculation(*item) for item in to_calculate))
+    print(sum(starmap(cephalopod_calculation, to_calculate)))
     part2_time = time_ns() - start
 
     # report times
