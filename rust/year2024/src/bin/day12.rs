@@ -1,7 +1,7 @@
 use std::collections::HashSet;
 use std::time::Instant;
 
-use aoc_shared::{read_input, report_times, Map2D};
+use aoc_shared::{Map2D, read_input, report_times};
 
 struct Area {
     plots: HashSet<(isize, isize)>,
@@ -122,7 +122,7 @@ fn find_areas(map: &Map2D<char>) -> Vec<Area> {
                 continue;
             }
             let plant = map
-                .get_isize(i, j)
+                .get_with_check_isize(i, j)
                 .expect("Getting element from map failed.");
             let area: Area = find_area_from_position(map, (i, j), plant);
             for position in &area.plots {
@@ -148,7 +148,7 @@ fn find_area_from_position(
             .pop()
             .expect("Could not get position to check from vector.");
         if map
-            .get_isize(position.0, position.1)
+            .get_with_check_isize(position.0, position.1)
             .expect("Could not get plant from position in map.")
             != plant
         {
@@ -162,7 +162,7 @@ fn find_area_from_position(
             }
 
             let new_plant: &char;
-            match map.get_isize(new_position.0, new_position.1) {
+            match map.get_with_check_isize(new_position.0, new_position.1) {
                 Some(found_plant) => new_plant = found_plant,
                 None => continue,
             }

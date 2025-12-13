@@ -4,7 +4,7 @@ use std::iter::Cycle;
 use std::time::Instant;
 use std::vec::IntoIter;
 
-use aoc_shared::{read_input, report_times, Map2D};
+use aoc_shared::{Map2D, read_input, report_times};
 
 struct Library {
     map: Map2D<char>,
@@ -18,7 +18,7 @@ impl Library {
         for x in 0..map.width() as isize {
             for y in 0..map.height() as isize {
                 let element = map
-                    .get_isize(x, y)
+                    .get_with_check_isize(x, y)
                     .expect("Could not get location from coordinates in library.");
                 if !"<>^v".contains(*element) {
                     continue;
@@ -32,7 +32,7 @@ impl Library {
                         return Err(Error::new(
                             ErrorKind::InvalidInput,
                             "Guard facing direction not understood.",
-                        ))
+                        ));
                     }
                 };
                 return Ok(((x, y), direction));
@@ -75,7 +75,7 @@ impl Library {
             self.guard.1 + self.direction.1,
         );
 
-        match self.map.get_isize(new_x, new_y) {
+        match self.map.get_with_check_isize(new_x, new_y) {
             Some('#') => Ok(false),
             Some(_) => {
                 self.guard = (new_x, new_y);
@@ -107,7 +107,7 @@ impl Library {
 
         let mut obstacles: usize = 0;
         for position in new_obstacle_positions {
-            self.map.set_isize(position.0, position.1, '#');
+            self.map.set_with_check_isize(position.0, position.1, '#');
 
             match self.move_guard() {
                 Ok(_) => {}
@@ -118,7 +118,7 @@ impl Library {
                 }
             }
 
-            self.map.set_isize(position.0, position.1, '.');
+            self.map.set_with_check_isize(position.0, position.1, '.');
             self.guard = original_guard_position.clone();
             self.direction = original_guard_direction.clone();
             self.history.clear();

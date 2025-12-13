@@ -1,3 +1,4 @@
+use std::clone::Clone;
 use std::fmt::Display;
 use std::fs::File;
 use std::io::{BufReader, Lines};
@@ -9,7 +10,7 @@ pub struct Map2D<T> {
     height: usize,
 }
 
-impl<T: Display + ParseElement> Map2D<T> {
+impl<T: Clone + Display + ParseElement> Map2D<T> {
     pub fn from_lines(lines: Lines<BufReader<File>>) -> Self {
         let mut data: Vec<T> = vec![];
         let mut width: usize = 0;
@@ -23,10 +24,7 @@ impl<T: Display + ParseElement> Map2D<T> {
 
             height += 1;
             width = line.len();
-
-            for char in line.chars() {
-                data.push(T::parse_element(char));
-            }
+            data.extend(line.chars().map(T::parse_element));
         }
 
         Map2D {
@@ -40,22 +38,33 @@ impl<T: Display + ParseElement> Map2D<T> {
         y * self.width + x
     }
 
-    pub fn get(&self, x: usize, y: usize) -> Option<&T> {
-        if x >= self.height || y >= self.width {
+    pub fn get(&self, x: usize, y: usize) -> &T {
+        self.data
+            .get(self.index(x, y))
+            .expect("Access into Map2D out of bounds.")
+    }
+
+    pub fn get_with_check(&self, x: usize, y: usize) -> Option<&T> {
+        if x >= self.width || y >= self.height {
             return None;
         }
         self.data.get(self.index(x, y))
     }
 
-    pub fn get_isize(&self, x: isize, y: isize) -> Option<&T> {
+    pub fn get_with_check_isize(&self, x: isize, y: isize) -> Option<&T> {
         if x < 0 || y < 0 {
             return None;
         }
-        self.get(x as usize, y as usize)
+        self.get_with_check(x as usize, y as usize)
     }
 
-    pub fn set(&mut self, x: usize, y: usize, value: T) -> bool {
-        if x >= self.height || y >= self.width {
+    pub fn set(&mut self, x: usize, y: usize, value: T) -> () {
+        let index = self.index(x, y);
+        self.data[index] = value;
+    }
+
+    pub fn set_with_check(&mut self, x: usize, y: usize, value: T) -> bool {
+        if x >= self.width || y >= self.height {
             return false;
         }
         let index = self.index(x, y);
@@ -63,17 +72,17 @@ impl<T: Display + ParseElement> Map2D<T> {
         true
     }
 
-    pub fn set_isize(&mut self, x: isize, y: isize, value: T) -> bool {
+    pub fn set_with_check_isize(&mut self, x: isize, y: isize, value: T) -> bool {
         if x < 0 || y < 0 {
             return false;
         }
-        self.set(x as usize, y as usize, value)
+        self.set_with_check(x as usize, y as usize, value)
     }
 
     pub fn print_map(&self) {
         for row in 0..self.height {
             for col in 0..self.width {
-                print!("{} ", self.data[row * self.width + col]);
+                print!("{} ", self.get(row, col));
             }
             println!();
         }
