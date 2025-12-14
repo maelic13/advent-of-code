@@ -7,23 +7,23 @@ import numpy as np
 
 from advent_of_code.infra import read_input, report_times
 
+type Point3D = tuple[int, int, int]
+
 
 class JunctionBoxClustering:
-    def __init__(self, datapoints: list[tuple[int, int, int]]) -> None:
+    def __init__(self, datapoints: list[Point3D]) -> None:
         self._datapoints = datapoints
-        self._distances: list[tuple[tuple[int, int, int], tuple[int, int, int], float]] | None = (
-            None
-        )
+        self._distances: list[tuple[Point3D, Point3D, float]] | None = None
 
     @staticmethod
-    def _euclidean_distance(d1: tuple[int, int, int], d2: tuple[int, int, int]) -> float:
+    def _euclidean_distance(d1: Point3D, d2: Point3D) -> float:
         return np.sqrt((d1[0] - d2[0]) ** 2 + (d1[1] - d2[1]) ** 2 + (d1[2] - d2[2]) ** 2)
 
     def _calculate_distances(
         self,
-    ) -> list[tuple[tuple[int, int, int], tuple[int, int, int], float]]:
+    ) -> list[tuple[Point3D, Point3D, float]]:
         if self._distances is None:
-            distances: list[tuple[tuple[int, int, int], tuple[int, int, int], float]] = []
+            distances: list[tuple[Point3D, Point3D, float]] = []
             for i, j in combinations(range(len(self._datapoints)), 2):
                 distances.append((
                     self._datapoints[i],
@@ -35,9 +35,9 @@ class JunctionBoxClustering:
 
     @staticmethod
     def _process_connection(
-        d1: tuple[int, int, int],
-        d2: tuple[int, int, int],
-        clusters: list[set[tuple[int, int, int]]],
+        d1: Point3D,
+        d2: Point3D,
+        clusters: list[set[Point3D]],
     ) -> None:
         cluster1 = None
         cluster2 = None
@@ -63,8 +63,8 @@ class JunctionBoxClustering:
         else:
             clusters.append({d1, d2})
 
-    def get_clusters(self, steps: int) -> list[set[tuple[int, int, int]]]:
-        clusters: list[set[tuple[int, int, int]]] = []
+    def get_clusters(self, steps: int) -> list[set[Point3D]]:
+        clusters: list[set[Point3D]] = []
         distances = self._calculate_distances()
 
         for i in range(steps):
@@ -73,8 +73,8 @@ class JunctionBoxClustering:
 
         return clusters
 
-    def get_last_connecting_boxes(self) -> tuple[tuple[int, int, int], tuple[int, int, int]]:
-        clusters: list[set[tuple[int, int, int]]] = []
+    def get_last_connecting_boxes(self) -> tuple[Point3D, Point3D]:
+        clusters: list[set[Point3D]] = []
         distances = self._calculate_distances()
 
         for i in range(len(distances)):
@@ -93,7 +93,7 @@ def day8() -> None:
 
     # read and parse file
     inputs = read_input(2025, 8, example=False).splitlines()
-    datapoints: list[tuple[int, int, int]] = []
+    datapoints: list[Point3D] = []
     for line in inputs:
         x, y, z = line.split(",")
         datapoints.append((int(x), int(y), int(z)))
