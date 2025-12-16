@@ -22,15 +22,14 @@ def format_duration(nanoseconds: int) -> str:
     """
     if nanoseconds < 1_000:
         return f"{nanoseconds}ns"
-    elif nanoseconds < 1_000_000:
-        return f"{nanoseconds / 1_000:.1f}µs"
-    elif nanoseconds < 1_000_000_000:
+    if nanoseconds < 1_000_000:
+        return f"{nanoseconds / 1_000:.1f}μs"
+    if nanoseconds < 1_000_000_000:
         return f"{nanoseconds / 1_000_000:.1f}ms"
-    elif nanoseconds < 60_000_000_000:
+    if nanoseconds < 60_000_000_000:
         return f"{nanoseconds / 1_000_000_000:.1f}s"
-    elif nanoseconds < 3_600_000_000_000:
+    if nanoseconds < 3_600_000_000_000:
         minutes = nanoseconds / 60_000_000_000
         return f"{minutes:.1f}min"
-    else:
-        hours = nanoseconds / 3_600_000_000_000
-        return f"{hours:.1f}h"
+    hours = nanoseconds / 3_600_000_000_000
+    return f"{hours:.1f}h"
